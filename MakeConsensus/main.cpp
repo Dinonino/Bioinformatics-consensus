@@ -11,9 +11,13 @@
 
 #include "read.h"
 #include "unitig.h"
+#include "realigner.h"
+#include "nucleic_codes.h"
 
 int main()
 {
+    Realigner realigner;
+
     QList<Unitig> unitigs;
 
     QFile readsFile("C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/reads.2k.10x.fasta");
@@ -116,6 +120,15 @@ int main()
    /* qDebug() << ((Read ) (unitigs.at(0).sequences.at(0))).getSequence();
     qDebug() << ((Read ) (unitigs.at(0).sequences.at(1))).getOffset();*/
 
+    int i=10; //npr.
+    for(Unitig unitig : unitigs){
+        for(int k=0; k<i && k<unitig.sequences.size(); k++){
+           //qDebug() <<((Read ) ( unitig.sequences.at(k))).getSequence()+"\n";
+           // TODO : algorithm
+        }
+    }
+
+    //qDebug() << "\nconsensus: "<< realigner.getColumnConsensus(unitigs.at(0),40);
 
     return 0;
 }
