@@ -122,13 +122,20 @@ int main()
 
     int i=10; //npr.
     for(Unitig unitig : unitigs){
-        for(int k=0; k<i && k<unitig.sequences.size(); k++){
-           //qDebug() <<((Read ) ( unitig.sequences.at(k))).getSequence()+"\n";
-           // TODO : algorithm
+        QString consensusA=realigner.getConsensus(unitig);
+        // TODO: score consenusA
+        for(int k=0; k<i && k<unitig.sequences.size(); k++){ // or until score consensusA increase
+           // TODO : detach k sequence from unitig
+           // TODO: get consensusB (realigner.getConsensus(unitig))
+           // TODO : align k sequence with consensuB
+           // TODO : attach aligned k sequence to unitig
+            // TODO : score new consensusA
         }
     }
 
-    //qDebug() << "\nconsensus: "<< realigner.getColumnConsensus(unitigs.at(0),40);
+    // qDebug() << "\nconsensus:" << realigner.getColumnConsensus(unitigs.at(0),50);
+    qDebug() << "\nconsensus:" << realigner.getConsensus(unitigs.at(0));
+    qDebug() <<"\n";
 
     return 0;
 }

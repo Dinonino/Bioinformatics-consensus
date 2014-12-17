@@ -17,7 +17,7 @@ void Nucleic_codes::fillCharToByteMap(){
     charToByteMap['R']= A | G;
     charToByteMap['Y']= C | T;
     charToByteMap['M']= C | A;
-    charToByteMap['K']= C | G;
+    charToByteMap['K']= T | G;
     charToByteMap['W']= T | A;
     charToByteMap['S']= C | G;
     charToByteMap['B']= C | T | G;
@@ -56,7 +56,7 @@ void Nucleic_codes::fillByteToCharMap(){
     byteToCharMap[A | G]='R';
     byteToCharMap[C | T]='Y';
     byteToCharMap[C | A]='M';
-    byteToCharMap[C | G]='K';
+    byteToCharMap[T | G]='K';
     byteToCharMap[T | A]='W';
     byteToCharMap[C | G]='S';
 
