@@ -117,25 +117,24 @@ int main()
 
     layoutFile.close();
 
-   /* qDebug() << ((Read ) (unitigs.at(0).sequences.at(0))).getSequence();
-    qDebug() << ((Read ) (unitigs.at(0).sequences.at(1))).getOffset();*/
 
     int i=10; //npr.
     for(Unitig unitig : unitigs){
         QString consensusA=realigner.getConsensus(unitig);
+        qDebug() << "Consensus A : " << consensusA;
         // TODO: score consenusA
         for(int k=0; k<i && k<unitig.sequences.size(); k++){ // or until score consensusA increase
-           // TODO : detach k sequence from unitig
-           // TODO: get consensusB (realigner.getConsensus(unitig))
-           // TODO : align k sequence with consensuB
-           // TODO : attach aligned k sequence to unitig
-            // TODO : score new consensusA
+            Read sequence=unitig.sequences.at(k);
+            unitig.sequences.removeAt(k);
+            QString consensusB=realigner.getConsensus(unitig);
+            qDebug() << "Consensus B : " << consensusB;
+           // TODO : align k sequence with consensuB : sequence=realigner.align(sequence, consensusB);
+            unitig.sequences.insert(k, sequence);
+            consensusA=realigner.getConsensus(unitig);
+            //TODO: score consensusA
         }
     }
 
-    // qDebug() << "\nconsensus:" << realigner.getColumnConsensus(unitigs.at(0),50);
-    qDebug() << "\nconsensus:" << realigner.getConsensus(unitigs.at(0));
-    qDebug() <<"\n";
 
     return 0;
 }

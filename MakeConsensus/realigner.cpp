@@ -47,15 +47,23 @@ char Realigner::getColumnConsensus(Unitig unitig, int colNum){
 }
 
 QString Realigner::getConsensus(Unitig unitig){
-    int maxLength=0;
+    Nucleic_codes nc;
+    int endOfUnitig=0;
+    int startOfUnitig=((Read)unitig.sequences.at(0)).getOffset();
     for(Read sequence : unitig.sequences){
-        if(sequence.getLength()+sequence.getOffset() > maxLength){
-            maxLength=sequence.getLength()+sequence.getOffset();
+        if(sequence.getLength()+sequence.getOffset() > endOfUnitig){
+            endOfUnitig=sequence.getLength()+sequence.getOffset();
+        }
+        if(sequence.getOffset()<startOfUnitig){
+           startOfUnitig=sequence.getOffset();
         }
     }
 
     QString consensus="";
-    for(int i=0; i<maxLength; i++){
+    for(int i=0; i<startOfUnitig ; i++){
+        consensus.append(" ");  // or '-', i'm not sure (here consensus doesn't exist but we keep track of offset of consensus)
+    }
+    for(int i=startOfUnitig; i<endOfUnitig; i++){
         QString columnConsensus=getColumnConsensus(unitig, i);
         consensus.append(columnConsensus);
     }
