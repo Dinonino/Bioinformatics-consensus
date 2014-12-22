@@ -7,7 +7,6 @@
 #include <QTextStream>
 #include <QStringList>
 #include <QDebug>
-#include <algorithm>
 
 #include "read.h"
 #include "unitig.h"
@@ -54,7 +53,6 @@ int main()
     }
 
     readsFile.close();
-   // std::cout << readsStringList.size();
 
 
     if (!layoutFile.open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -103,7 +101,6 @@ int main()
                     sequence->setSequence(reverseSequence.mid(0,start-end));
 
                 }
-               // qDebug() << sequence->getSequence();
                 unitigSequences << *sequence;
                 delete sequence;
 
@@ -111,6 +108,7 @@ int main()
 
             Unitig unitig;
             unitig.sequences = unitigSequences;
+            unitig.setStartEnd();
             unitigs << unitig;
 
     }
@@ -118,20 +116,23 @@ int main()
     layoutFile.close();
 
 
-    int i=10; //npr.
+    int i=10; //npr. i=10
+    int score;
     for(Unitig unitig : unitigs){
-        QString consensusA=realigner.getConsensus(unitig);
+        QString consensusA=realigner.getAndScoreConsensus(unitig,&score);
         qDebug() << "Consensus A : " << consensusA;
-        // TODO: score consenusA
-        for(int k=0; k<i && k<unitig.sequences.size(); k++){ // or until score consensusA increase
+        for(int k=0; k<i && k<unitig.sequences.size(); k++){
             Read sequence=unitig.sequences.at(k);
-            unitig.sequences.removeAt(k);
+            unitig.removeSequence(k);
             QString consensusB=realigner.getConsensus(unitig);
             qDebug() << "Consensus B : " << consensusB;
-           // TODO : align k sequence with consensuB : sequence=realigner.align(sequence, consensusB);
-            unitig.sequences.insert(k, sequence);
-            consensusA=realigner.getConsensus(unitig);
-            //TODO: score consensusA
+
+           // TODO : align k sequence with consensuB : sequence=realigner.align(sequence, consensusB, consensusBOffset, E-error rate);
+
+            unitig.insertSequnce(k, sequence);
+            int newScore;
+            consensusA=realigner.getAndScoreConsensus(unitig, &newScore);
+            if (newScore > score) break;
         }
     }
 
