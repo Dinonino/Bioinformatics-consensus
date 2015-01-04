@@ -5,6 +5,7 @@
 #include <list>
 #include <vector>
 
+
 #include "read.h"
 #include "unitig.h"
 #include "realigner.h"
@@ -31,7 +32,7 @@ int main()
 {
     Realigner realigner;
 
-    list<Unitig> unitigs;
+    vector<Unitig> unitigs;
 
     ifstream readsFile;
     ifstream layoutFile;
@@ -43,15 +44,16 @@ int main()
     vector<string> readsStringList;
     string readString="";
 
+    readsFile.open(readsLocation.c_str());
 
-    if (!readsFile.open(readsLocation.c_str())){
+    if (!readsFile.is_open()){
         std::cout << "Unable to open file";
         exit(-1);
     }
 
 
     string line;
-    while (!readsFile.eof) {
+    while (!readsFile.eof()) {
 
     	getline(readsFile, line);
 
@@ -60,12 +62,12 @@ int main()
             readString+=line;
             getline(readsFile, line);
 
-            if(readsFile.eof) break;
+            if(readsFile.eof()) break;
         }
 
-        if(readString.length == 0) continue;
+        if(readString.length() == 0) continue;
 
-        readsStringList << readString;
+        readsStringList.push_back(readString);
         readString="";
 
     }
@@ -73,8 +75,8 @@ int main()
     readsFile.close();
    // std::cout << readsStringList.size();
 
-
-    if (!layoutFile.open(layoutLocation.c_str())){
+    layoutFile.open(layoutLocation.c_str());
+    if (!layoutFile.is_open()){
         std::cout << "Unable to open file";
         exit(-1);
     }
@@ -83,11 +85,11 @@ int main()
 
 
 
-    while (!layoutFile.eof) {
+    while (!layoutFile.eof()) {
 
     	getline(layoutFile, line);
         if(line.compare("{LAY")==0) continue;
-        list<Read> unitigSequences;
+        vector<Read> unitigSequences;
 
             while(line.compare("}")!=0){
                 Read* sequence=new Read();
@@ -121,23 +123,26 @@ int main()
 
                 }
                // qDebug() << sequence->getSequence();
-                unitigSequences << *sequence;
+                unitigSequences.push_back(*sequence);
                 delete sequence;
 
             }
 
             Unitig unitig;
             unitig.sequences = unitigSequences;
-            unitigs << unitig;
+            unitigs.push_back(unitig);
 
     }
 
     layoutFile.close();
 
 
-    int i=10; //npr.
-    for(Unitig unitig : unitigs){
-        string consensusA=realigner.getConsensus(unitig);
+    int i=10;
+    string consensusA;
+    Unitig unitig;
+    for(int i=0; i< unitigs.size(); i++){
+    	unitig = unitigs.at(i);
+        consensusA=realigner.getConsensus(unitig);
         cout << "Consensus A : " << consensusA;
         // TODO: score consenusA
         for(int k=0; k<i && k<unitig.sequences.size(); k++){ // or until score consensusA increase
