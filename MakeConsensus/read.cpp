@@ -1,4 +1,5 @@
 #include "read.h"
+#include <string>
 
 void Read::setLength(int n){
     length=n;
@@ -8,7 +9,7 @@ void Read::setOffset(int n){
     offset=n;
 }
 
-void Read::setSequence(QString seq){
+void Read::setSequence(string seq){
     sequence=seq;
 }
 
@@ -20,10 +21,11 @@ int Read::getOffset(){
     return offset;
 }
 
-QString Read::getSequence(){
+string Read::getSequence(){
     return sequence;
 }
 
 Read::Read(){
-
+	length = 0;
+	offset = 0;
 }

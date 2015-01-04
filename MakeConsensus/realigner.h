@@ -2,18 +2,18 @@
 #define REALIGNER_H
 
 #include "unitig.h"
-#include "qstring.h"
+#include <string>
+
+using namespace std;
 
 
 class Realigner
 {
 public:
     Realigner();
-    QString getConsensus(Unitig unitig);
-    QString getAndScoreConsensus(Unitig unitig, int* score);
-private:
     char getColumnConsensus(Unitig unitig, int colNum);
-    char getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score);
+    string getConsensus(Unitig unitig);
+private:
 
 };
 

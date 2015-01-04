@@ -1,5 +1,7 @@
 #include "nucleic_codes.h"
-#include <QMap>
+#include <map>
+
+using namespace std;
 
 Nucleic_codes::Nucleic_codes()
 {
@@ -46,11 +48,12 @@ void Nucleic_codes::fillCharToByteMap(){
 }
 
 void Nucleic_codes::fillByteToCharMap(){
-    byteToCharMap[A]='A';
-    byteToCharMap[C]='C';
-    byteToCharMap[T]='T';
-    byteToCharMap[G]='G';
-    byteToCharMap[dash]='-';
+	byteToCharMap[ A ]='A';
+    byteToCharMap[ C ]='C';
+    byteToCharMap[ T ]='T';
+    byteToCharMap[ G ]='G';
+    byteToCharMap[ dash ]='-';
+
 
 
     byteToCharMap[A | G]='R';
@@ -85,11 +88,11 @@ void Nucleic_codes::fillByteToCharMap(){
 
 }
 
-QMap<char,char> Nucleic_codes::getCharToByteMap(){
+map<char,char> Nucleic_codes::getCharToByteMap(){
     return charToByteMap;
 }
 
-QMap<char,char> Nucleic_codes::getByteToCharMap(){
+map<char,char> Nucleic_codes::getByteToCharMap(){
     return byteToCharMap;
 }
 
