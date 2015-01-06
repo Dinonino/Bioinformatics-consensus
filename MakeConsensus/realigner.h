@@ -3,6 +3,7 @@
 
 #include "unitig.h"
 #include "qstring.h"
+#include "consensus.h"
 
 
 class Realigner
@@ -14,6 +15,9 @@ public:
 private:
     char getColumnConsensus(Unitig unitig, int colNum);
     char getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score);
+    void align(Read sequence,QString consensus,int e);
+    Consensus getConsensus2(Unitig unitig);
+    column getColumnConsensus2(Unitig unitig, int colNum);
 
 };
 
