@@ -17,6 +17,7 @@ public:
     static const char  C= 1 << 2;
     static const char  G= 1 << 1;
     static const char T= 1 << 0;
+    static const char all= dash | A | C | G | T;
 private:
     QMap<char, char> charToByteMap;
     QMap<char, char> byteToCharMap;

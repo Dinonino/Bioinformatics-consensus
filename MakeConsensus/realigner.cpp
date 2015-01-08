@@ -13,6 +13,11 @@ Realigner::Realigner()
 char Realigner::getColumnConsensus(Unitig unitig, int colNum){
     Nucleic_codes nc;
     QMap<QChar,int> frequency;
+    frequency['g']=0;
+    frequency['c']=0;
+    frequency['a']=0;
+    frequency['t']=0;
+    frequency['-']=0;
     for(Read sequence : unitig.sequences){
         //qDebug() << sequence.getSequence() << " "<< sequence.getOffset();
         if(sequence.getOffset()<= colNum && sequence.getOffset()+sequence.getLength() > colNum){
@@ -120,14 +125,14 @@ column Realigner::getColumnConsensus2(Unitig unitig, int colNum)
             max=value;
         }
     }
-    int mismatch;
+    /*int mismatch;
     foreach(int value, frequency){
         if(value<max){
             mismatch+=value;
         }
-    }
+    }*/
     ret.total=total;
-    ret.mismatches=mismatch;
+    ret.freq=frequency;
 
     if(max==0) {
         ret.chatAt=nc.getCharFromByte(nc.A | nc.C | nc.G | nc.T | nc.dash);
@@ -178,4 +183,63 @@ QString Realigner::getAndScoreConsensus(Unitig unitig, int *score){
     }
 
     return consensus;
+}
+
+void Realigner::align(Consensus consensusB, Read sequence, double E)
+{
+    Nucleic_codes nc;
+    char dash=nc.dash;
+    char empty=nc.getCharFromByte(nc.A | nc.C | nc.G | nc.T | nc.dash);
+    int len=sequence.getLength()+((int)(E*sequence.getLength()))*2;
+    double* nw=(double*)malloc(sizeof(double)*(sequence.getLength()+1)*(len+1));
+    if(sequence.getOffset()-sequence.getLength()*E<consensusB.getOffset()) {//sufiks-prefiks
+
+    } else if(sequence.getOffset()+len-((len-sequence.getLength())/2)>=consensusB.getOffset()+consensusB.getLength()) {//prefiks-sufiks
+
+    } else {//podniz
+        Consensus cons=consensusB.getSubConsensus(sequence.getOffset()-sequence.getLength()*E,len);
+
+        int i,j;
+        double match,insert;
+        int consLen=cons.getLength()+1;
+        int seqLen=sequence.getLength()+1;
+        for(i=0;i<consLen;i++) nw[i]=0;
+        for(i=0;i<seqLen;i++) nw[i*seqLen]=1000000;
+        for(i=1;i<seqLen;i++) {
+            for(j=1;j<consLen;j++) {
+                column col=cons.getColumn(j-1);
+                char seqChar=sequence.getSequence().at(i-1).toLatin1();
+                char  seqByte=nc.getByteFromChar(seqChar);
+                char consByte=col.chatAt;
+                double matched=0,inserted=0;
+                if((consByte&seqChar)>0) matched=1;
+                if((consByte&dash)>0) inserted=1;
+                match=nw[(i-1)*seqLen+j-1]+0.5*matched+0.5*(col.freq[seqChar]/col.total);
+                insert=nw[i*seqLen+j-1]+0.25+0.5*inserted+0.5*(col.freq['-']/col.total);
+                if(match<insert) {
+                    nw[i*seqLen+j]=insert;
+                } else {
+                    nw[i*seqLen+j]=match;
+                }
+            }
+        }
+    }
+    free(nw);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

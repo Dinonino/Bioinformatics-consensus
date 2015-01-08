@@ -2,10 +2,11 @@
 #define CONSENSUS_H
 #include<QString>
 #include<QList>
+#include<QMap>
 
 typedef struct {
-    QString chatAt;
-    int mismatches;
+    char chatAt;
+    QMap<QChar,int> freq;
     int total;
 } column;
 
@@ -22,7 +23,9 @@ public:
     int getLength();
     int getOffset();
     void append(column col);
+    column getColumn(int index);
     QString getSequence();
+    Consensus getSubConsensus(int offset,int length);
 };
 
 #endif // CONSENSUS_H
