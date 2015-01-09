@@ -190,124 +190,116 @@ void Realigner::align(Consensus consensusB, Read sequence, double E)
 {
     Nucleic_codes nc;
     char dash=nc.dash;
-    char empty=nc.getCharFromByte(nc.A | nc.C | nc.G | nc.T | nc.dash);
-    int len=sequence.getLength()+((int)(E*sequence.getLength()))*2;
+    int diffLen=(int)(E*sequence.getLength());
+    int len=sequence.getLength()+diffLen*2;
     double* nw=(double*)malloc(sizeof(double)*(sequence.getLength()+1)*(len+1));
-    if(sequence.getOffset()-(int)(E*sequence.getLength())<consensusB.getOffset()) {//sufiks-prefiks
+    char* direction=(char*)malloc((sequence.getLength()+1)*(len+1));
 
 
-        Consensus cons=consensusB.getSubConsensus(sequence.getOffset()-(int)(E*sequence.getLength()),len);
 
-        int i,j,sufixLen=0;
-        double match,insert;
-        int consLen=cons.getLength()+1;
-        int seqLen=sequence.getLength()+1;
-        for(i=0;i<consLen;i++) nw[i]=0;
-        for(i=0;i<seqLen;i++) nw[i*seqLen]=1000000;
-        while(sufixLen!=cons.getLength() || cons.getColumn(sufixLen).total==0) {
-            sufixLen++;
-        }
-        for(i=1;i<seqLen;i++) {
-            for(j=1;j<consLen;j++) {
-                column col=cons.getColumn(j-1);
-                if(col.total==0) {
-                    double match,insert;
-                    match=nw[(i-1)*seqLen+j-1];
-                    insert=nw[i*seqLen+j-1]+0.25;
-                    if(match>insert) nw[i*seqLen+j]=insert;
-                    else nw[i*seqLen+j]=match;
+
+    Consensus cons=consensusB.getSubConsensus(sequence.getOffset()-diffLen,len);
+    cons.setOffset(consensusB.getOffset()-diffLen);
+    int i,j;
+    double match,insert,max=-1;
+    int consLen=cons.getLength()+1;
+    int seqLen=sequence.getLength()+1;
+    for(i=0;i<consLen;i++) {
+        nw[i]=0;
+        direction[i]=-1;
+    }
+    for(i=0;i<seqLen;i++) {
+        nw[i*seqLen]=1000000;
+        direction[i*seqLen]=-1;
+    }
+    for(i=1;i<seqLen;i++) {
+        for(j=1;j<consLen;j++) {
+            column col=cons.getColumn(j-1);
+            if(col.total==0) {
+                double match,insert;
+                match=nw[(i-1)*consLen+j-1];
+                insert=nw[i*consLen+j-1]+0.25;
+                if(match>insert) nw[i*consLen+j]=insert;
+                else nw[i*consLen+j]=match;
+            } else {
+                char seqChar=sequence.getSequence().at(i-1).toLatin1();
+                char  seqByte=nc.getByteFromChar(seqChar);
+                char consByte=nc.getByteFromChar(col.chatAt);
+                double matched=1,inserted=1;
+                if((consByte&seqByte)>0) matched=0;
+                if((consByte&dash)>0) inserted=0;
+                match=nw[(i-1)*consLen+j-1]+0.5*matched+0.5*(1-col.freq[seqChar]/col.total);
+                insert=nw[i*consLen+j-1]+0.25+0.5*inserted+0.5*(1-col.freq['-']/col.total);
+                if(match>insert) {
+                    nw[i*consLen+j]=insert;
+                    direction[i*consLen+j]=0;
                 } else {
-                    char seqChar=sequence.getSequence().at(i-1).toLatin1();
-                    char  seqByte=nc.getByteFromChar(seqChar);
-                    char consByte=nc.getByteFromChar(col.chatAt);
-                    double matched=1,inserted=1;
-                    if((consByte&seqByte)>0) matched=0;
-                    if((consByte&dash)>0) inserted=0;
-                    match=nw[(i-1)*seqLen+j-1]+0.5*matched+0.5*(1-col.freq[seqChar]/col.total);
-                    insert=nw[i*seqLen+j-1]+0.25+0.5*inserted+0.5*(1-col.freq['-']/col.total);
-                    if(match>insert) {
-                        nw[i*seqLen+j]=insert;
-                    } else {
-                        nw[i*seqLen+j]=match;
-                    }
-                }
-            }
-        }
-
-
-    } else if(sequence.getOffset()+len-((len-sequence.getLength())/2)>=consensusB.getOffset()+consensusB.getLength()) {//prefiks-sufiks
-        Consensus cons=consensusB.getSubConsensus(sequence.getOffset()-(int)(E*sequence.getLength()),len);
-        int i,j,prefixLen=0;
-        double match,insert;
-        int consLen=cons.getLength()+1;
-        int seqLen=sequence.getLength()+1;
-        for(i=0;i<consLen;i++) nw[i]=0;
-        for(i=0;i<seqLen;i++) nw[i*seqLen]=1000000;
-        while(prefixLen!=cons.getLength() || cons.getColumn(consLen-2-prefixLen).total==0) {
-            prefixLen++;
-        }
-        for(i=1;i<seqLen;i++) {
-            for(j=1;j<consLen;j++) {
-                column col=cons.getColumn(j-1);
-                if(col.total==0) {
-                    double match,insert;
-                    match=nw[(i-1)*seqLen+j-1];
-                    insert=nw[i*seqLen+j-1]+0.25;
-                    if(match>insert) nw[i*seqLen+j]=insert;
-                    else nw[i*seqLen+j]=match;
-                } else {
-                    char seqChar=sequence.getSequence().at(i-1).toLatin1();
-                    char  seqByte=nc.getByteFromChar(seqChar);
-                    char consByte=nc.getByteFromChar(col.chatAt);
-                    double matched=1,inserted=1;
-                    if((consByte&seqByte)>0) matched=0;
-                    if((consByte&dash)>0) inserted=0;
-                    match=nw[(i-1)*seqLen+j-1]+0.5*matched+0.5*(1-col.freq[seqChar]/col.total);
-                    insert=nw[i*seqLen+j-1]+0.25+0.5*inserted+0.5*(1-col.freq['-']/col.total);
-                    if(match>insert) {
-                        nw[i*seqLen+j]=insert;
-                    } else {
-                        nw[i*seqLen+j]=match;
-                    }
-                }
-            }
-        }
-    } else {//podniz
-        Consensus cons=consensusB.getSubConsensus(sequence.getOffset()-sequence.getLength()*E,len);
-
-        int i,j;
-        double match,insert;
-        int consLen=cons.getLength()+1;
-        int seqLen=sequence.getLength()+1;
-        for(i=0;i<consLen;i++) nw[i]=0;
-        for(i=0;i<seqLen;i++) nw[i*seqLen]=1000000;
-        for(i=1;i<seqLen;i++) {
-            for(j=1;j<consLen;j++) {
-                column col=cons.getColumn(j-1);
-                if(col.total==0) {
-                    double match,insert;
-                    match=nw[(i-1)*seqLen+j-1];
-                    insert=nw[i*seqLen+j-1]+0.25;
-                    if(match>insert) nw[i*seqLen+j]=insert;
-                    else nw[i*seqLen+j]=match;
-                } else {
-                    char seqChar=sequence.getSequence().at(i-1).toLatin1();
-                    char  seqByte=nc.getByteFromChar(seqChar);
-                    char consByte=nc.getByteFromChar(col.chatAt);
-                    double matched=1,inserted=1;
-                    if((consByte&seqByte)>0) matched=0;
-                    if((consByte&dash)>0) inserted=0;
-                    match=nw[(i-1)*seqLen+j-1]+0.5*matched+0.5*(1-col.freq[seqChar]/col.total);
-                    insert=nw[i*seqLen+j-1]+0.25+0.5*inserted+0.5*(1-col.freq['-']/col.total);
-                    if(match>insert) {
-                        nw[i*seqLen+j]=insert;
-                    } else {
-                        nw[i*seqLen+j]=match;
-                    }
+                    nw[i*consLen+j]=match;
+                    direction[i*consLen+j]=1;
                 }
             }
         }
     }
+
+    int maxCol;
+    if(sequence.getOffset()-diffLen<consensusB.getOffset()) {//sufiks-prefiks
+
+        int sufixLen=0;
+        while(sufixLen!=cons.getLength()-1 || cons.getColumn(sufixLen).total==0) {
+            sufixLen++;
+        }
+        int out=0;
+        for(i=1;i<consLen;i++) {
+            if(i-1<(sufixLen)) out=sufixLen-(i-1);
+            if(max==-1 || nw[(seqLen-1)*consLen+i]<max) {
+                max=nw[(seqLen-1)*consLen+i]/(seqLen-1-out);
+                maxCol=i;
+            }
+            out=0;
+        }
+
+    } else if(sequence.getOffset()+len-diffLen>=consensusB.getOffset()+consensusB.getLength()) {//prefiks-sufiks
+        int prefixLen=0;
+        while(prefixLen!=cons.getLength()-1 || cons.getColumn(consLen-2-prefixLen).total==0) {
+            prefixLen++;
+
+        }
+        int end=cons.getLength()-1-prefixLen;
+        int out=0;
+        for(i=1;i<consLen;i++) {
+            if(end<(i-1)) out=i-1-end;
+            if(max==-1 || nw[(seqLen-1)*consLen+i]<max) {
+                max=nw[(seqLen-1)*consLen+i]/(seqLen-1-out);
+                maxCol=i;
+            }
+            out=0;
+        }
+
+    } else {//podniz
+       for(i=1;i<consLen;i++) {
+           if(max==-1 || nw[(seqLen-1)*consLen+i]<max) {
+               max=nw[(seqLen-1)*consLen+i];
+               maxCol=i;
+           }
+       }
+    }
+    QString final="";
+    i=seqLen-1;
+    j=maxCol;
+    QString seqString=sequence.getSequence();
+    while(i>0) {
+        if(direction[i*consLen+j]) {
+           final.insert(0,seqString.at(i-1));
+           i--;
+        } else {
+           final.insert(0,"-");
+        }
+        j--;
+    }
+    Read returnRead;
+    returnRead.setSequence(final);
+    returnRead.setOffset(consensusB.getOffset()-diffLen+j);
+    free(direction);
     free(nw);
 
 
