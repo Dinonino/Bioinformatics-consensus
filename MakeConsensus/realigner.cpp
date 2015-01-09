@@ -13,11 +13,6 @@ Realigner::Realigner()
 char Realigner::getColumnConsensus(Unitig unitig, int colNum){
     Nucleic_codes nc;
     QMap<QChar,int> frequency;
-    frequency['g']=0;
-    frequency['c']=0;
-    frequency['a']=0;
-    frequency['t']=0;
-    frequency['-']=0;
     for(Read sequence : unitig.sequences){
         //qDebug() << sequence.getSequence() << " "<< sequence.getOffset();
         if(sequence.getOffset()<= colNum && sequence.getOffset()+sequence.getLength() > colNum){
@@ -91,16 +86,16 @@ char Realigner::getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score
 
 Consensus Realigner::getConsensus2(Unitig unitig)
 {
-    Consensus *consensus=new Consensus();
+    Consensus consensus;
  /*   for(int i=0; i<unitig.getStart() ; i++){
         consensus.append(" ");  // or '-' or '&', i'm not sure (here consensus doesn't exist but we keep track of offset of consensus)
     }*/
     for(int i=unitig.getStart(); i<unitig.getEnd(); i++){
         column columnConsensus=getColumnConsensus2(unitig, i);
-        consensus->append(columnConsensus);
+        consensus.append(columnConsensus);
     }
 
-    return *consensus;
+    return consensus;
 }
 
 column Realigner::getColumnConsensus2(Unitig unitig, int colNum)
@@ -108,6 +103,11 @@ column Realigner::getColumnConsensus2(Unitig unitig, int colNum)
     Nucleic_codes nc;
     column ret;
     QMap<QChar,int> frequency;
+    frequency['g']=0;
+    frequency['c']=0;
+    frequency['a']=0;
+    frequency['t']=0;
+    frequency['-']=0;
     for(Read sequence : unitig.sequences){
         //qDebug() << sequence.getSequence() << " "<< sequence.getOffset();
         if(sequence.getOffset()<= colNum && sequence.getOffset()+sequence.getLength() > colNum){
@@ -199,7 +199,6 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
 
 
     Consensus cons=consensusB.getSubConsensus(sequence.getOffset()-diffLen,len);
-    cons.setOffset(consensusB.getOffset()-diffLen);
     int i,j;
     double match,insert,max=-1;
     int consLen=cons.getLength()+1;
