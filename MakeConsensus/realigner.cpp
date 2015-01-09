@@ -186,7 +186,7 @@ QString Realigner::getAndScoreConsensus(Unitig unitig, int *score){
     return consensus;
 }
 
-void Realigner::align(Consensus consensusB, Read sequence, double E)
+Read Realigner::align(Consensus consensusB, Read sequence, double E)
 {
     Nucleic_codes nc;
     char dash=nc.dash;

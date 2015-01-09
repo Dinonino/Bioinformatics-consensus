@@ -13,7 +13,7 @@ public:
     Realigner();
     QString getConsensus(Unitig unitig);
     QString getAndScoreConsensus(Unitig unitig, int* score);
-    void align(Consensus consensusB, Read sequence, double E);
+    Read align(Consensus consensusB, Read sequence, double E);
 private:
     char getColumnConsensus(Unitig unitig, int colNum);
     char getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score);
