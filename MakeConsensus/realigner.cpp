@@ -324,6 +324,7 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
     returnRead.setOffset(consensusB.getOffset()-diffLen+j);
     free(direction);
     free(nw);
+    return returnRead;
 
 
 
