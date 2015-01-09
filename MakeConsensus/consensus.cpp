@@ -55,8 +55,8 @@ Consensus Consensus::getSubConsensus(int offset, int length)
         if((i+offset)<this->offset || (i+offset)>=(this->offset+this->getLength())) {
             column c;
             c.chatAt=nc.all;
-            newCons.append(c);//TODO append end dash
-            continue;
+            c.total=0;
+            newCons.append(c);
         } else {
             newCons.append(sequence.at(offset+i));
         }
