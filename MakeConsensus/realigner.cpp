@@ -242,25 +242,48 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
     }
 
     int maxCol;
-    if(sequence.getOffset()-diffLen<consensusB.getOffset()) {//sufiks-prefiks
-
-        int sufixLen=0;
-        while(sufixLen!=cons.getLength()-1 || cons.getColumn(sufixLen).total==0) {
+    if(sequence.getOffset()-diffLen<consensusB.getOffset() && sequence.getOffset()+sequence.getLength()+diffLen>=consensusB.getOffset()+consensusB.getLength()) {
+        int sufixLen=0,prefixLen=0;
+        while(sufixLen<cons.getLength()-1 && cons.getColumn(sufixLen).total==0) {
             sufixLen++;
         }
-        int out=0;
+        while(prefixLen<cons.getLength()-1 && cons.getColumn(consLen-2-prefixLen).total==0) {
+            prefixLen++;
+
+        }
+        int end=cons.getLength()-1-prefixLen;
+        int out=1;
         for(i=1;i<consLen;i++) {
-            if(i-1<(sufixLen)) out=sufixLen-(i-1);
+            if((i-1)>sufixLen) out=i-sufixLen;
+            if(end<(i-1)) out=seqLen-1-out;
+            if(end<(i-1) && (i-seqLen)<sufixLen) out=consensusB.getLength();
             if(max==-1 || nw[(seqLen-1)*consLen+i]<max) {
-                max=nw[(seqLen-1)*consLen+i]/(seqLen-1-out);
+                max=nw[(seqLen-1)*consLen+i]/out;
                 maxCol=i;
             }
-            out=0;
+            out=1;
         }
 
-    } else if(sequence.getOffset()+len-diffLen>=consensusB.getOffset()+consensusB.getLength()) {//prefiks-sufiks
+    }
+    else if(sequence.getOffset()-diffLen<consensusB.getOffset()) {//sufiks-prefiks
+
+        int sufixLen=0;
+        while(sufixLen<cons.getLength()-1 && cons.getColumn(sufixLen).total==0) {
+            sufixLen++;
+        }
+        int out=1;
+        for(i=1;i<consLen;i++) {
+            if((i-1)>sufixLen) out=i-sufixLen;
+            if(max==-1 || nw[(seqLen-1)*consLen+i]<max) {
+                max=nw[(seqLen-1)*consLen+i]/out;
+                maxCol=i;
+            }
+            out=1;
+        }
+
+    } else if(sequence.getOffset()+sequence.getLength()+diffLen>=consensusB.getOffset()+consensusB.getLength()) {//prefiks-sufiks
         int prefixLen=0;
-        while(prefixLen!=cons.getLength()-1 || cons.getColumn(consLen-2-prefixLen).total==0) {
+        while(prefixLen<cons.getLength()-1 && cons.getColumn(consLen-2-prefixLen).total==0) {
             prefixLen++;
 
         }
