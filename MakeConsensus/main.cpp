@@ -12,6 +12,7 @@
 #include "unitig.h"
 #include "realigner.h"
 #include "nucleic_codes.h"
+#include "consensus.h"
 
 int main()
 {
@@ -19,8 +20,8 @@ int main()
 
     QList<Unitig> unitigs;
 
-    QFile readsFile("C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/reads.2k.10x.fasta");
-    QFile layoutFile ("C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/layouts.afg");
+    QFile readsFile("C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/reads.2k.10x2.fasta");
+    QFile layoutFile ("C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/layouts2.afg");
 
     QList<QString> readsStringList;
     QString readString="";
@@ -111,6 +112,7 @@ int main()
             unitig.setStartEnd();
             unitigs << unitig;
 
+
     }
 
     layoutFile.close();
@@ -120,20 +122,72 @@ int main()
     int score;
     for(Unitig unitig : unitigs){
         QString consensusA=realigner.getAndScoreConsensus(unitig,&score);
-        qDebug() << "Consensus A : " << consensusA;
+
+        //ova funkcija je samo za ispis:
         for(int k=0; k<i && k<unitig.sequences.size(); k++){
             Read sequence=unitig.sequences.at(k);
-            unitig.removeSequence(k);
-            QString consensusB=realigner.getConsensus(unitig);
-            qDebug() << "Consensus B : " << consensusB;
+            QString seq=sequence.getSequence();
+            for(int z=0; z<sequence.getOffset();z++){
+                seq.prepend(' ');
+            }
+            qDebug() << k+1 << ". "<<seq;
 
-           // TODO : align k sequence with consensuB : sequence=realigner.align(sequence, consensusB, consensusBOffset, E-error rate);
+        }
+
+         qDebug() << consensusA  << " Consensus A ";
+
+        for(int k=0; k<i && k<unitig.sequences.size(); k++){
+            Read sequence=unitig.sequences.at(k);
+        //    Read read1=unitig.sequences.at(0);
+          //  qDebug() << read1.getOffset();
+
+            unitig.removeSequence(k);
+
+         //  read1=unitig.sequences.at(0);
+           // qDebug() << read1.getOffset();
+
+            Consensus consensusB=realigner.getConsensus2(unitig);
+            consensusB.setOffset(unitig.getStart());
+
+           // qDebug() << sequence.getOffset();
+           // qDebug() << "Consensus B : " << consensusB.getSequence();
+            sequence=realigner.align(consensusB, sequence, 0.1);
+
+            qDebug() << "sequence " << k+1 << ".";
+
+
+
+         //    qDebug() << sequence.getOffset();
 
             unitig.insertSequnce(k, sequence);
+
+           // read1=unitig.sequences.at(0);
+          //   qDebug() << read1.getOffset();
+
             int newScore;
-            consensusA=realigner.getAndScoreConsensus(unitig, &newScore);
-            if (newScore > score) break;
+           qDebug() << consensusB.getSequence() <<" Consensus B";
+            consensusA=realigner.getConsensus2(unitig).getSequence();
+
+            //for petlja samo za ispis:
+             qDebug() << "New alignment:";
+            for(int j=0; j<i && j<unitig.sequences.size(); j++){
+                Read sequence=unitig.sequences.at(j);
+                QString seq=sequence.getSequence();
+                for(int i=0; i<sequence.getOffset();i++){
+                    seq.prepend(' ');
+                }
+                for(int i=sequence.getOffset(); i<0; i++){
+                    seq.prepend('.');
+                }
+                qDebug() << j+1 << ". "<<seq;
+
+            }
+
+            qDebug()  << consensusA<< " New consensus A";
+         //   if (newScore > score) break;
+
         }
+
     }
 
 

@@ -1,5 +1,6 @@
 #include "unitig.h"
 #include <QString>
+#include <QDebug>
 
 Unitig::Unitig()
 {
@@ -36,6 +37,7 @@ void Unitig::insertSequnce(int k, Read sequence){
 void Unitig::setStartEnd(){
     int endOfUnitig=0;
     int startOfUnitig=((Read)sequences.at(0)).getOffset();
+
     for(Read sequence : sequences){
         if(sequence.getLength()+sequence.getOffset() > endOfUnitig){
             endOfUnitig=sequence.getLength()+sequence.getOffset();

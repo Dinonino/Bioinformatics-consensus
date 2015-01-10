@@ -90,6 +90,7 @@ Consensus Realigner::getConsensus2(Unitig unitig)
  /*   for(int i=0; i<unitig.getStart() ; i++){
         consensus.append(" ");  // or '-' or '&', i'm not sure (here consensus doesn't exist but we keep track of offset of consensus)
     }*/
+
     for(int i=unitig.getStart(); i<unitig.getEnd(); i++){
         column columnConsensus=getColumnConsensus2(unitig, i);
         consensus.append(columnConsensus);
@@ -194,9 +195,6 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
     int len=sequence.getLength()+diffLen*2;
     double* nw=(double*)malloc(sizeof(double)*(sequence.getLength()+1)*(len+1));
     char* direction=(char*)malloc((sequence.getLength()+1)*(len+1));
-
-
-
 
     Consensus cons=consensusB.getSubConsensus(sequence.getOffset()-diffLen,len);
     int i,j;
@@ -313,6 +311,8 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
     QString final="";
     i=seqLen-1;
     j=maxCol;
+
+
     QString seqString=sequence.getSequence();
     while(i>0) {
         if(direction[i*consLen+j]) {
