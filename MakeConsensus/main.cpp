@@ -20,8 +20,8 @@ int main()
 
     QList<Unitig> unitigs;
 
-    QFile readsFile("C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/readsSuperSimple2.fasta");
-    QFile layoutFile ("C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/layoutSuperSimple2.afg");
+    QFile readsFile("C:/Users/Pickles/Desktop/Bioinformatiks/Bioinformatics-consensus/lib/reads.2k.10x.fasta");
+    QFile layoutFile ("C:/Users/Pickles/Desktop/Bioinformatiks/Bioinformatics-consensus/lib/layouts.afg");
 
     QList<QString> readsStringList;
     QString readString="";
@@ -143,7 +143,7 @@ int main()
             Consensus consensusB=realigner.getConsensus2(unitig);
             consensusB.setOffset(unitig.getStart());
 
-            sequence=realigner.align(consensusB, sequence, 0.5);
+            sequence=realigner.align(consensusB, sequence, 0.1);
 
             qDebug() << "sequence " << k+1 << ".";
 

@@ -208,7 +208,7 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         direction[i]=-1;
     }
     for(i=1;i<seqLen;i++) {
-        nw[i*consLen]=100;
+        nw[i*consLen]=1000000000000;
         direction[i*seqLen]=-1;
     }
 
@@ -278,7 +278,8 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
             if((i-1)>sufixLen) out=i-sufixLen;
             if(end<(i-1)) out=seqLen-1-out;
             if(end<(i-1) && (i-seqLen)<sufixLen) out=consensusB.getLength();
-            if(max==-1 || nw[(seqLen-1)*consLen+i]<max) {
+            double current=nw[(seqLen-1)*consLen+i]/out;
+            if(max==-1 || current<max) {
                 max=nw[(seqLen-1)*consLen+i]/out;
                 maxCol=i;
             }
@@ -295,8 +296,9 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         int out=1;
         for(i=1;i<consLen;i++) {
             if((i-1)>sufixLen) out=i-sufixLen;
-            if(max==-1 || nw[(seqLen-1)*consLen+i]<max) {
-                max=nw[(seqLen-1)*consLen+i]/out;
+            double current=nw[(seqLen-1)*consLen+i]/out;
+            if(max==-1 || current<max) {
+                max=current;
                 maxCol=i;
             }
             out=1;
@@ -312,8 +314,9 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         int out=0;
         for(i=1;i<consLen;i++) {
             if(end<(i-1)) out=i-1-end;
-            if(max==-1 || nw[(seqLen-1)*consLen+i]<max) {
-                max=nw[(seqLen-1)*consLen+i]/(seqLen-1-out);
+            double current=nw[(seqLen-1)*consLen+i]/(seqLen-1-out);
+            if(max==-1 || current<max) {
+                max=current;
                 maxCol=i;
             }
             out=0;
@@ -345,9 +348,12 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         j--;
     }
     int newOffset=cons.getOffset()+j;
-  /*  qDebug()<<maxCol;
-    qDebug()<< j;
-    qDebug()<< newOffset;*/
+    qDebug()<<"novo";
+    qDebug()<<"maxCol: "<<maxCol;
+    qDebug()<< "j: "<<j;
+    qDebug()<< "newoffset: "<<newOffset;
+    qDebug()<<"cons.offset: "<<cons.getOffset();
+    qDebug()<<"difflen: "<<diffLen;
 
     Read returnRead;
     returnRead.setSequence(final);
