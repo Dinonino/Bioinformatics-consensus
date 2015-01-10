@@ -344,7 +344,7 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         }
         j--;
     }
-    int newOffset=consensusB.getOffset()-diffLen+j;
+    int newOffset=cons.getOffset()+j;
     qDebug()<<maxCol;
     qDebug()<< j;
     qDebug()<< newOffset;
