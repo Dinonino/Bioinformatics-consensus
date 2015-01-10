@@ -20,8 +20,8 @@ int main()
 
     QList<Unitig> unitigs;
 
-    QFile readsFile("C:/Users/Pickles/Desktop/Bioinformatiks/Bioinformatics-consensus/lib/reads.2k.10x2.fasta");
-    QFile layoutFile ("C:/Users/Pickles/Desktop/Bioinformatiks/Bioinformatics-consensus/lib/layouts2.afg");
+    QFile readsFile("C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/readsSuperSimple2.fasta");
+    QFile layoutFile ("C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/layoutSuperSimple2.afg");
 
     QList<QString> readsStringList;
     QString readString="";
@@ -138,32 +138,16 @@ int main()
 
         for(int k=0; k<i && k<unitig.sequences.size(); k++){
             Read sequence=unitig.sequences.at(k);
-        //    Read read1=unitig.sequences.at(0);
-          //  qDebug() << read1.getOffset();
-
             unitig.removeSequence(k);
-
-         //  read1=unitig.sequences.at(0);
-           // qDebug() << read1.getOffset();
 
             Consensus consensusB=realigner.getConsensus2(unitig);
             consensusB.setOffset(unitig.getStart());
 
-
-           // qDebug() << sequence.getOffset();
-           // qDebug() << "Consensus B : " << consensusB.getSequence();
-            sequence=realigner.align(consensusB, sequence, 0.1);
+            sequence=realigner.align(consensusB, sequence, 0.5);
 
             qDebug() << "sequence " << k+1 << ".";
 
-
-
-         //    qDebug() << sequence.getOffset();
-
             unitig.insertSequnce(k, sequence);
-
-           // read1=unitig.sequences.at(0);
-          //   qDebug() << read1.getOffset();
 
             int newScore;
            qDebug() << consensusB.getSequence() <<" Consensus B";
@@ -177,15 +161,21 @@ int main()
                 for(int i=0; i<sequence.getOffset();i++){
                     seq.prepend(' ');
                 }
-                for(int i=sequence.getOffset(); i<0; i++){
-                    seq.prepend('.');
+                if(sequence.getOffset()>=0 && unitig.getStart()<0){
+                    for(int i=unitig.getStart();i<0;i++){
+                        seq.prepend('.');
+                    }
+                } else if(sequence.getOffset()<0 && sequence.getOffset()!=unitig.getStart()){
+                    for(int i=0; i<sequence.getOffset()-unitig.getStart(); i++){
+                        seq.prepend('.');
+                    }
                 }
-                qDebug() << j+1 << ". "<<seq;
+                qDebug() << j+1 << "."<<seq;
 
             }
 
-            qDebug()  << consensusA<< " New consensus A";
-         //   if (newScore > score) break;
+            qDebug()  << consensusA<< " New consensus A, offset: " << unitig.getStart();
+           // if (newScore > score) break;   todo:change scoring function
 
         }
 

@@ -189,7 +189,7 @@ QString Realigner::getAndScoreConsensus(Unitig unitig, int *score){
 
 Read Realigner::align(Consensus consensusB, Read sequence, double E)
 {
-    qDebug()<<"align funkcija";
+   // qDebug()<<"align funkcija";
     Nucleic_codes nc;
     char dash=nc.dash;
     int diffLen=(int)(E*sequence.getLength());
@@ -255,7 +255,7 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         for(j=0;j<consLen;j++) {
             str+=QString::number(nw[i*consLen+j])+" ";
         }
-        qDebug()<<str;
+      //  qDebug()<<str;
         str="";
     }
 
@@ -345,9 +345,9 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         j--;
     }
     int newOffset=cons.getOffset()+j;
-    qDebug()<<maxCol;
+  /*  qDebug()<<maxCol;
     qDebug()<< j;
-    qDebug()<< newOffset;
+    qDebug()<< newOffset;*/
 
     Read returnRead;
     returnRead.setSequence(final);
