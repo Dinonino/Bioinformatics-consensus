@@ -149,6 +149,7 @@ int main()
             Consensus consensusB=realigner.getConsensus2(unitig);
             consensusB.setOffset(unitig.getStart());
 
+
            // qDebug() << sequence.getOffset();
            // qDebug() << "Consensus B : " << consensusB.getSequence();
             sequence=realigner.align(consensusB, sequence, 0.1);
