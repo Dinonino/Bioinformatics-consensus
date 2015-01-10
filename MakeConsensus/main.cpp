@@ -20,8 +20,8 @@ int main()
 
     QList<Unitig> unitigs;
 
-    QFile readsFile("C:/Users/Pickles/Desktop/Bioinformatiks/Bioinformatics-consensus/lib/reads.2k.10x.fasta");
-    QFile layoutFile ("C:/Users/Pickles/Desktop/Bioinformatiks/Bioinformatics-consensus/lib/layouts.afg");
+    QFile readsFile("C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/reads.2k.10x.fasta");
+    QFile layoutFile ("C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/layouts.afg");
 
     QList<QString> readsStringList;
     QString readString="";
@@ -173,7 +173,6 @@ int main()
                 qDebug() << j+1 << "."<<seq;
 
             }
-
             qDebug()  << consensusA<< " New consensus A, offset: " << unitig.getStart();
            // if (newScore > score) break;   todo:change scoring function
 
