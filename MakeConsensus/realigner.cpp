@@ -211,6 +211,9 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         nw[i*seqLen]=1000000;
         direction[i*seqLen]=-1;
     }
+
+
+    /* Needleman Wunsch*/
     for(i=1;i<seqLen;i++) {
         for(j=1;j<consLen;j++) {
             column col=cons.getColumn(j-1);
@@ -305,6 +308,8 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
            }
        }
     }
+
+    //trace maksimuma do pocetka
     QString final="";
     i=seqLen-1;
     j=maxCol;

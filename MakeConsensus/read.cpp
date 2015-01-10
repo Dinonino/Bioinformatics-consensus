@@ -10,6 +10,7 @@ void Read::setOffset(int n){
 
 void Read::setSequence(QString seq){
     sequence=seq;
+    length=seq.length();
 }
 
 int Read::getLength(){
