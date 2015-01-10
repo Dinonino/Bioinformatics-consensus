@@ -205,8 +205,8 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         nw[i]=0;
         direction[i]=-1;
     }
-    for(i=0;i<seqLen;i++) {
-        nw[i*seqLen]=1000000;
+    for(i=1;i<seqLen;i++) {
+        nw[i*seqLen]=100;
         direction[i*seqLen]=-1;
     }
 
@@ -226,8 +226,10 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
                 char  seqByte=nc.getByteFromChar(seqChar);
                 char consByte=nc.getByteFromChar(col.chatAt);
                 double matched=1,inserted=1;
+                //qDebug()<<seqChar<<","<<col.chatAt;
                 if((consByte&seqByte)>0) matched=0;
                 if((consByte&dash)>0) inserted=0;
+                //qDebug()<<QString::number(matched);
                 match=nw[(i-1)*consLen+j-1]+0.5*matched+0.5*(1-col.freq[seqChar]/col.total);
                 insert=nw[i*consLen+j-1]+0.25+0.5*inserted+0.5*(1-col.freq['-']/col.total);
                 if(match>insert) {
@@ -323,9 +325,22 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         }
         j--;
     }
+    int newOffset=consensusB.getOffset()-diffLen+j;
+    qDebug() << "j:" << j;
+    qDebug() << "maxCol:"<<maxCol;
+    qDebug()<< consensusB.getOffset();
+
+    QString str="";
+    for(i=0;i<seqLen;i++) {
+        for(j=0;j<consLen;j++) {
+            str+=QString::number(nw[i*consLen+j])+" ";
+        }
+        qDebug()<<str;
+        str="";
+    }
     Read returnRead;
     returnRead.setSequence(final);
-    returnRead.setOffset(consensusB.getOffset()-diffLen+j);
+    returnRead.setOffset(newOffset);
     free(direction);
     free(nw);
     return returnRead;
