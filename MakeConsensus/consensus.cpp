@@ -1,5 +1,6 @@
 #include "consensus.h"
 #include "nucleic_codes.h"
+#include <qdebug.h>
 
 Consensus::Consensus()
 {
@@ -50,15 +51,19 @@ Consensus Consensus::getSubConsensus(int offset, int length)
     Consensus newCons;
     newCons.setOffset(offset);
 
+    qDebug()<<offset;
+    qDebug()<<length;
+    qDebug()<<this->getLength();
+    qDebug()<<this->getOffset();
     int i=0;
     for(i=0;i<length;i++) {
-        if((i+offset)<this->offset || (i+offset)>=(this->offset+this->getLength())) {
+        if((i+offset)<(this->offset) || (i+offset)>=(this->offset+this->getLength())) {
             column c;
             c.chatAt=nc.all;
             c.total=0;
             newCons.append(c);
         } else {
-            newCons.append(sequence.at(offset+i));
+            newCons.append(sequence.at(offset+i-this->offset));
         }
     }
     return newCons;
