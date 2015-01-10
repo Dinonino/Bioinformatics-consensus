@@ -326,18 +326,7 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         j--;
     }
     int newOffset=consensusB.getOffset()-diffLen+j;
-    qDebug() << "j:" << j;
-    qDebug() << "maxCol:"<<maxCol;
-    qDebug()<< consensusB.getOffset();
 
-    QString str="";
-    for(i=0;i<seqLen;i++) {
-        for(j=0;j<consLen;j++) {
-            str+=QString::number(nw[i*consLen+j])+" ";
-        }
-        qDebug()<<str;
-        str="";
-    }
     Read returnRead;
     returnRead.setSequence(final);
     returnRead.setOffset(newOffset);
