@@ -1,21 +1,24 @@
 #ifndef READ_H
 #define READ_H
-#include "qstring.h"
+
+#include <string>
+
+using namespace std;
 
 class Read
 {
 private:
     int length;
     int offset;
-    QString sequence;
+    string sequence;
 public:
     Read();
     void setLength(int n);
     void setOffset(int n);
-    void setSequence(QString seq);
+    void setSequence(string seq);
     int getLength();
     int getOffset();
-    QString getSequence();
+    string getSequence();
 
 
 };

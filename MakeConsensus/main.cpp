@@ -1,12 +1,9 @@
-#include <QCoreApplication>
 #include <iostream>
 #include <fstream>
-#include <QString>
-#include <QList>
-#include <QFile>
-#include <QTextStream>
-#include <QStringList>
-#include <QDebug>
+#include <sstream>
+#include <algorithm>
+#include <list>
+#include <vector>
 
 #include "read.h"
 #include "unitig.h"
@@ -14,130 +11,126 @@
 #include "nucleic_codes.h"
 #include "consensus.h"
 
+
+ vector<std::string> &split(const string &s, char delim, vector<string> &elems) {
+        stringstream ss(s);
+        string item;
+        while (getline(ss, item, delim)) {
+            if(!item.empty())
+                elems.push_back(item);
+        }
+        return elems;
+    }
+
+    vector<std::string> split(const string &s, char delim) {
+        vector<string> elems;
+        split(s, delim, elems);
+        return elems;
+    }
+
 int main()
 {
     Realigner realigner;
 
-    QList<Unitig> unitigs;
+    vector<Unitig> unitigs;
 
-    QFile readsFile("C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/reads.2k.10x.fasta");
-    QFile layoutFile ("C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/layouts.afg");
+    ifstream readsFile;
+    ifstream layoutFile;
+    string readsLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/reads.2k.10x.fasta\0";
+    string layoutLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/layouts.afg\0";
 
-    QList<QString> readsStringList;
-    QString readString="";
+    vector<string> readsStringList;
+    string readString="";
 
 
-    if (!readsFile.open(QIODevice::ReadOnly | QIODevice::Text)){
+    if (!readsFile.is_open()){
         std::cout << "Unable to open file";
         exit(-1);
     }
 
-    QTextStream inReads(&readsFile);
 
-    while (!inReads.atEnd()) {
-
-        QString line = inReads.readLine();
-
+    string line;
+    while (!readsFile.eof()) {
+        getline(readsFile, line);
         while(line.at(0)!='>'){
-
             readString+=line;
-            line = inReads.readLine();
-
-            if(inReads.atEnd()) break;
+            getline(readsFile, line);
+            if(readsFile.eof()) break;
         }
-
-        if(readString.isEmpty()) continue;
-
-        readsStringList << readString;
+        if(readString.length() == 0) continue;
+        readsStringList.push_back(readString);
         readString="";
-
     }
 
     readsFile.close();
 
 
-    if (!layoutFile.open(QIODevice::ReadOnly | QIODevice::Text)){
-        std::cout << "Unable to open file";
-        exit(-1);
-    }
-
-    QTextStream inUnitigs(&layoutFile);
-
-
-
-    while (!inUnitigs.atEnd()) {
-
-        QString line = inUnitigs.readLine();
+    while (!layoutFile.eof()) {
+        getline(layoutFile, line);
         if(line.compare("{LAY")==0) continue;
-        QList<Read> unitigSequences;
-
-            while(line.compare("}")!=0){
-                Read* sequence=new Read();
-                line=inUnitigs.readLine();
-                QString clr=line.split(":")[1];
-                QStringList startEnd=clr.split(",");
-                int start=startEnd[0].toInt();
-                int end=startEnd[1].toInt();
-
-                line=inUnitigs.readLine();
-                int offset=line.split(":")[1].toInt();
-
-                line=inUnitigs.readLine();
-                int src=line.split(":")[1].toInt();
-                inUnitigs.readLine();
-
-                line=inUnitigs.readLine();
-
-                sequence->setOffset(offset);
-
-                if(start<end){
-                    sequence->setLength(end-start);
-                    sequence->setSequence(readsStringList.at(src-1).mid(0,end-start));
-
-                } else {
-                    sequence->setLength(start-end);
-                    std::string cstr = readsStringList.at(src-1).toStdString();
-                    std::reverse(cstr.begin(), cstr.end());
-                    QString reverseSequence=QString::fromStdString(cstr);
-                    sequence->setSequence(reverseSequence.mid(0,start-end));
-
-                }
-                unitigSequences << *sequence;
-                delete sequence;
-
+        vector<Read> unitigSequences;
+        while(line.compare("}")!=0){
+            Read* sequence=new Read();
+            getline(layoutFile, line);
+            string clr=split(line, ':')[1];
+            vector<string> startEnd=split(clr, ',');
+            int start=atoi(startEnd[0].c_str());
+            int end=atoi(startEnd[1].c_str());
+            getline(layoutFile, line);
+            int offset= atoi(split(line, ':')[1].c_str());
+            getline(layoutFile, line);
+            int src=atoi(split(line, ':')[1].c_str());;
+            getline(layoutFile, line);
+            getline(layoutFile, line);
+            sequence->setOffset(offset);
+            if(start<end){
+                sequence->setLength(end-start);
+                sequence->setSequence(readsStringList[src-1].substr(0,end-start));
+            } else {
+                sequence->setLength(start-end);
+                string cstr = readsStringList[src-1];
+                reverse(cstr.begin(), cstr.end());
+                string reverseSequence=cstr;
+                sequence->setSequence(reverseSequence.substr(0,start-end));
             }
-
-            Unitig unitig;
-            unitig.sequences = unitigSequences;
-            unitig.setStartEnd();
-            unitigs << unitig;
-
-
+            // qDebug() << sequence->getSequence();
+            unitigSequences.push_back(*sequence);
+            delete sequence;
+            }
+        Unitig unitig;
+        unitig.sequences = unitigSequences;
+        unitigs.push_back(unitig);
     }
+
 
     layoutFile.close();
 
 
     int i=10; //npr. i=10
     int score;
-    for(Unitig unitig : unitigs){
-        QString consensusA=realigner.getAndScoreConsensus(unitig,&score);
+    Unitig unitig;
+    string consensusA;
+    for(int i=0; i < unitigs.size() ; i++){
+        unitig = unitigs.at(i);
+        consensusA = realigner.getAndScoreConsensus(unitig,&score);
 
+        Read sequence;
+        string seq;
         //ova funkcija je samo za ispis:
         for(int k=0; k<i && k<unitig.sequences.size(); k++){
-            Read sequence=unitig.sequences.at(k);
-            QString seq=sequence.getSequence();
+            sequence=unitig.sequences.at(k);
+            seq=sequence.getSequence();
             for(int z=0; z<sequence.getOffset();z++){
-                seq.prepend(' ');
+                seq.insert(0, " ");
             }
-            qDebug() << k+1 << ". "<<seq;
+            cerr << k+1 << ". " << seq << endl;
 
         }
 
-         qDebug() << consensusA  << " Consensus A ";
+        cerr << consensusA  << " Consensus A ";
 
         for(int k=0; k<i && k<unitig.sequences.size(); k++){
-            Read sequence=unitig.sequences.at(k);
+            sequence=unitig.sequences.at(k);
             unitig.removeSequence(k);
 
             Consensus consensusB=realigner.getConsensus2(unitig);
@@ -145,35 +138,35 @@ int main()
 
             sequence=realigner.align(consensusB, sequence, 0.1);
 
-            qDebug() << "sequence " << k+1 << ".";
+            cerr << "sequence " << k+1 << "." << endl;
 
             unitig.insertSequnce(k, sequence);
 
             int newScore;
-           qDebug() << consensusB.getSequence() <<" Consensus B";
+            cerr << consensusB.getSequence() <<" Consensus B" << endl;
             consensusA=realigner.getConsensus2(unitig).getSequence();
 
             //for petlja samo za ispis:
-             qDebug() << "New alignment:";
+            cerr << "New alignment:" << endl;
             for(int j=0; j<i && j<unitig.sequences.size(); j++){
-                Read sequence=unitig.sequences.at(j);
-                QString seq=sequence.getSequence();
+                sequence=unitig.sequences.at(j);
+                string seq=sequence.getSequence();
                 for(int i=0; i<sequence.getOffset();i++){
-                    seq.prepend(' ');
+                    seq.insert(0, "  ");
                 }
                 if(sequence.getOffset()>=0 && unitig.getStart()<0){
                     for(int i=unitig.getStart();i<0;i++){
-                        seq.prepend('.');
+                        seq.insert(0, ".");
                     }
                 } else if(sequence.getOffset()<0 && sequence.getOffset()!=unitig.getStart()){
                     for(int i=0; i<sequence.getOffset()-unitig.getStart(); i++){
-                        seq.prepend('.');
+                        seq.insert(0, ".");
                     }
                 }
-                qDebug() << j+1 << "."<<seq;
+                cerr << j+1 << "." << seq << endl;
 
             }
-            qDebug()  << consensusA<< " New consensus A, offset: " << unitig.getStart();
+            cerr << consensusA << " New consensus A, offset: " << unitig.getStart();
            // if (newScore > score) break;   todo:change scoring function
 
         }

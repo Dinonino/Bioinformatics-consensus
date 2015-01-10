@@ -1,16 +1,16 @@
 #include "unitig.h"
-#include <QString>
-#include <QDebug>
+
+#include <string>
 
 Unitig::Unitig()
 {
 }
 
-void Unitig::setConsensus(QString consensus){
+void Unitig::setConsensus(string consensus){
     this->consensus=consensus;
 }
 
-QString Unitig::getConsensus(){
+string Unitig::getConsensus(){
     return consensus;
 }
 
@@ -23,13 +23,13 @@ int Unitig::getStart(){
 }
 
 void Unitig::removeSequence(int k){
-    sequences.removeAt(k);
+    sequences.erase(sequences.begin() + k);
 
     setStartEnd();
 }
 
 void Unitig::insertSequnce(int k, Read sequence){
-    sequences.insert(k,sequence);
+    sequences.insert(sequences.begin() + k,sequence);
 
     setStartEnd();
 }
@@ -38,12 +38,12 @@ void Unitig::setStartEnd(){
     int endOfUnitig=0;
     int startOfUnitig=((Read)sequences.at(0)).getOffset();
 
-    for(Read sequence : sequences){
-        if(sequence.getLength()+sequence.getOffset() > endOfUnitig){
-            endOfUnitig=sequence.getLength()+sequence.getOffset();
+    for (int i=0; i< sequences.size(); i++){
+        if(sequences.at(i).getLength()+sequences.at(i).getOffset() > endOfUnitig){
+            endOfUnitig=sequences.at(i).getLength()+sequences.at(i).getOffset();
         }
-        if(sequence.getOffset()<startOfUnitig){
-           startOfUnitig=sequence.getOffset();
+        if(sequences.at(i).getOffset()<startOfUnitig){
+           startOfUnitig=sequences.at(i).getOffset();
         }
     }
 

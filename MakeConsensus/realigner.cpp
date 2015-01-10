@@ -1,10 +1,12 @@
 #include "realigner.h"
 #include "nucleic_codes.h"
-#include <QMap>
-#include <QMapIterator>
-#include <QChar>
 
-#include <QDebug>
+#include <map>
+#include <sstream>
+#include <stdlib.h>
+#include <iostream>
+
+using namespace std;
 
 Realigner::Realigner()
 {
@@ -12,36 +14,40 @@ Realigner::Realigner()
 
 char Realigner::getColumnConsensus(Unitig unitig, int colNum){
     Nucleic_codes nc;
-    QMap<QChar,int> frequency;
-    for(Read sequence : unitig.sequences){
-        //qDebug() << sequence.getSequence() << " "<< sequence.getOffset();
+    map<char,int> frequency;
+    Read sequence;
+    for(int i=0; i < unitig.sequences.size() ; i++){
+        sequence = unitig.sequences.at(i);
         if(sequence.getOffset()<= colNum && sequence.getOffset()+sequence.getLength() > colNum){
-          //  qDebug() << sequence.getSequence().at(colNum-sequence.getOffset());
             frequency[sequence.getSequence().at(colNum-sequence.getOffset())]++;
-          //  qDebug() << "OVAJ";
         }
     }
 
     int max=0;
-    foreach(int value, frequency){
-        if(value>max){
-            max=value;
+    map<char, int>::iterator iter;
+    for (iter = frequency.begin(); iter != frequency.end(); iter++){
+        if(iter->second>max){
+            max=iter->second;
         }
     }
+
+
+
 
     if(max==0) return nc.getCharFromByte(nc.A | nc.C | nc.G | nc.T | nc.dash);
 
-    // qDebug() << "\nmax: " << max;
-    char result=0;
-    QMapIterator<QChar, int> i(frequency);
-    while (i.hasNext()) {
-        i.next();
-        if(i.value()==max){
-            result= result | nc.getByteFromChar(i.key().toLatin1());
 
+    char result=0;
+
+
+    for (iter = frequency.begin(); iter != frequency.end(); ++iter){
+        if(iter->second==max){
+            result = result | nc.getByteFromChar(iter->first);
         }
     }
-   // qDebug() << "------ " << nc.getCharFromByte(result) ;
+
+
+
     return nc.getCharFromByte(result);
 
 }
@@ -50,17 +56,20 @@ char Realigner::getColumnConsensus(Unitig unitig, int colNum){
 
 char Realigner::getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score){
     Nucleic_codes nc;
-    QMap<QChar,int> frequency;
-    for(Read sequence : unitig.sequences){
+    map<char,int> frequency;
+    Read sequence;
+    for(int i=0; i < unitig.sequences.size() ; i++){
+        sequence = unitig.sequences.at(i);
         if(sequence.getOffset()<= colNum && sequence.getOffset()+sequence.getLength() > colNum){
             frequency[sequence.getSequence().at(colNum-sequence.getOffset())]++;
         }
     }
 
     int max=0;
-    foreach(int value, frequency){
-        if(value>max){
-            max=value;
+    map<char, int>::iterator iter;
+    for (iter = frequency.begin(); iter != frequency.end(); iter++){
+        if(iter->second>max){
+            max=iter->second;
         }
     }
     *score=0;
@@ -69,14 +78,12 @@ char Realigner::getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score
 
     char result=0;
 
-    QMapIterator<QChar, int> i(frequency);
-    while (i.hasNext()) {
-        i.next();
-        if(i.value()==max){
-            result= result | nc.getByteFromChar(i.key().toLatin1());
+    for (iter = frequency.begin(); iter != frequency.end(); iter++){
+        if(iter->second==max){
+            result = result | nc.getByteFromChar(iter->first);
 
         } else {
-            *score=*score+i.value();
+            *score=*score+iter->second;
         }
     }
 
@@ -103,27 +110,27 @@ column Realigner::getColumnConsensus2(Unitig unitig, int colNum)
 {
     Nucleic_codes nc;
     column ret;
-    QMap<QChar,int> frequency;
+    map<char,int> frequency;
     frequency['g']=0;
     frequency['c']=0;
     frequency['a']=0;
     frequency['t']=0;
     frequency['-']=0;
-    for(Read sequence : unitig.sequences){
-        //qDebug() << sequence.getSequence() << " "<< sequence.getOffset();
+    Read sequence;
+    for(int i=0; i < unitig.sequences.size(); i++){
+        sequence = unitig.sequences.at(i);
         if(sequence.getOffset()<= colNum && sequence.getOffset()+sequence.getLength() > colNum){
-          //  qDebug() << sequence.getSequence().at(colNum-sequence.getOffset());
             frequency[sequence.getSequence().at(colNum-sequence.getOffset())]++;
-          //  qDebug() << "OVAJ";
         }
     }
 
     int max=0;
     int total=0;
-    foreach(int value, frequency){
-        total+=value;
-        if(value>max){
-            max=value;
+    map<char, int>::iterator iter;
+    for (iter = frequency.begin(); iter != frequency.end(); iter++){
+        total+= iter->second;
+        if(iter->second>max){
+            max=iter->second;
         }
     }
     /*int mismatch;
@@ -143,11 +150,9 @@ column Realigner::getColumnConsensus2(Unitig unitig, int colNum)
 
     // qDebug() << "\nmax: " << max;
     char result=0;
-    QMapIterator<QChar, int> i(frequency);
-    while (i.hasNext()) {
-        i.next();
-        if(i.value()==max){
-            result= result | nc.getByteFromChar(i.key().toLatin1());
+    for (iter = frequency.begin(); iter != frequency.end(); iter++){
+        if(iter->second==max){
+            result= result | nc.getByteFromChar(iter->first);
 
         }
     }
@@ -156,30 +161,39 @@ column Realigner::getColumnConsensus2(Unitig unitig, int colNum)
     return ret;
 }
 
-QString Realigner::getConsensus(Unitig unitig){
+string Realigner::getConsensus(Unitig unitig){
 
-    QString consensus="";
+    string consensus="";
  /*   for(int i=0; i<unitig.getStart() ; i++){
         consensus.append(" ");  // or '-' or '&', i'm not sure (here consensus doesn't exist but we keep track of offset of consensus)
     }*/
+    string columnConsensus;
+    stringstream ss;
     for(int i=unitig.getStart(); i<unitig.getEnd(); i++){
-        QString columnConsensus=getColumnConsensus(unitig, i);
+        columnConsensus = "";
+        ss << getColumnConsensus(unitig, i);
+        ss >> columnConsensus;
         consensus.append(columnConsensus);
     }
 
     return consensus;
 }
 
-QString Realigner::getAndScoreConsensus(Unitig unitig, int *score){
-    QString consensus="";
+string Realigner::getAndScoreConsensus(Unitig unitig, int *score){
+    string consensus="";
  /*   for(int i=0; i<unitig.getStart() ; i++){
         consensus.append(" ");  // or '-' or '&', i'm not sure (here consensus doesn't exist but we keep track of offset of consensus)
     }*/
 
     int columnScore;
     *score=0;
+    string columnConsensus;
+    stringstream ss;
+
     for(int i=unitig.getStart(); i<unitig.getEnd(); i++){
-        QString columnConsensus=getAndScoreColumnConsensus(unitig, i,&columnScore);
+        columnConsensus = "";
+        ss << getAndScoreColumnConsensus(unitig, i,&columnScore);
+        ss >> columnConsensus;
         consensus.append(columnConsensus);
         *score=*score+columnScore;
     }
@@ -229,7 +243,7 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
                 if(match>insert) nw[i*consLen+j]=insert;
                 else nw[i*consLen+j]=match;
             } else {
-                char seqChar=sequence.getSequence().at(i-1).toLatin1();
+                char seqChar=sequence.getSequence().at(i-1);
                 char  seqByte=nc.getByteFromChar(seqChar);
                 char consByte=nc.getByteFromChar(col.chatAt);
                 double matched=1,inserted=1;
@@ -250,10 +264,15 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         }
     }
 
-    QString str="";
+    string str="";
+    string number;
+    ostringstream convert;
     for(i=0;i<seqLen;i++) {
         for(j=0;j<consLen;j++) {
-            str+=QString::number(nw[i*consLen+j])+" ";
+            convert << (nw[i*consLen+j]);
+            number = convert.str();
+            convert.str("");
+            str+=number+" ";
         }
       //  qDebug()<<str;
         str="";
@@ -332,15 +351,19 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
     }
 
     //trace maksimuma do pocetka
-    QString final="";
+    string final="";
     i=seqLen-1;
     j=maxCol;
 
 
-    QString seqString=sequence.getSequence();
+    string seqString=sequence.getSequence();
+    stringstream ss;
     while(i>0) {
         if(direction[i*consLen+j]) {
-           final.insert(0,seqString.at(i-1));
+            ss << seqString.at(i-1);
+            str = "";
+            ss >> str;
+           final.insert(0, str);
            i--;
         } else {
            final.insert(0,"-");
@@ -348,12 +371,12 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         j--;
     }
     int newOffset=cons.getOffset()+j;
-    qDebug()<<"novo";
-    qDebug()<<"maxCol: "<<maxCol;
-    qDebug()<< "j: "<<j;
-    qDebug()<< "newoffset: "<<newOffset;
-    qDebug()<<"cons.offset: "<<cons.getOffset();
-    qDebug()<<"difflen: "<<diffLen;
+    cerr << "novo" << endl;
+    cerr << "maxCol: " << maxCol << endl;
+    cerr << "j: " << j << endl;
+    cerr << "newoffset: "<< newOffset << endl;
+    cerr << "cons.offset: " << cons.getOffset() << endl;
+    cerr << "difflen: "<< diffLen << endl;
 
     Read returnRead;
     returnRead.setSequence(final);

@@ -1,5 +1,5 @@
 #include "nucleic_codes.h"
-#include <QMap>
+
 
 Nucleic_codes::Nucleic_codes()
 {
@@ -85,11 +85,11 @@ void Nucleic_codes::fillByteToCharMap(){
 
 }
 
-QMap<char,char> Nucleic_codes::getCharToByteMap(){
+map<char,char> Nucleic_codes::getCharToByteMap(){
     return charToByteMap;
 }
 
-QMap<char,char> Nucleic_codes::getByteToCharMap(){
+map<char,char> Nucleic_codes::getByteToCharMap(){
     return byteToCharMap;
 }
 

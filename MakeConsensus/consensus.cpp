@@ -1,6 +1,7 @@
 #include "consensus.h"
 #include "nucleic_codes.h"
-#include <qdebug.h>
+#include "iostream"
+
 
 Consensus::Consensus()
 {
@@ -19,7 +20,7 @@ void Consensus::setOffset(int n){
 
 
 int Consensus::getLength(){
-    return sequence.length();
+    return sequence.size();
 }
 
 int Consensus::getOffset(){
@@ -28,7 +29,7 @@ int Consensus::getOffset(){
 
 void Consensus::append(column col)
 {
-    sequence.append(col);
+    sequence.push_back(col);
 }
 
 column Consensus::getColumn(int index)
@@ -36,8 +37,8 @@ column Consensus::getColumn(int index)
     return sequence.at(index);
 }
 
-QString Consensus::getSequence(){
-    QString seq="";
+string Consensus::getSequence(){
+    string seq="";
     int i;
     for(i=0;i<this->getLength();i++) {
         seq+=sequence.at(i).chatAt;
@@ -51,10 +52,10 @@ Consensus Consensus::getSubConsensus(int offset, int length)
     Consensus newCons;
     newCons.setOffset(offset);
 
-    qDebug()<<offset;
-    qDebug()<<length;
-    qDebug()<<this->getLength();
-    qDebug()<<this->getOffset();
+    cerr << offset << endl;
+    cerr << length << endl;
+    cerr << this->getLength() << endl;
+    cerr <<this->getOffset();
     int i=0;
     for(i=0;i<length;i++) {
         if((i+offset)<(this->offset) || (i+offset)>=(this->offset+this->getLength())) {
