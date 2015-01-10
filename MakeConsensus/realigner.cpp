@@ -206,9 +206,13 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         direction[i]=-1;
     }
     for(i=1;i<seqLen;i++) {
-        nw[i*seqLen]=100;
+        nw[i*consLen]=100;
         direction[i*seqLen]=-1;
     }
+
+
+
+
 
 
     /* Needleman Wunsch*/
@@ -242,6 +246,18 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
             }
         }
     }
+
+    QString str="";
+    for(i=0;i<seqLen;i++) {
+        for(j=0;j<consLen;j++) {
+            str+=QString::number(nw[i*consLen+j])+" ";
+        }
+        qDebug()<<str;
+        str="";
+    }
+
+
+
 
     int maxCol;
     if(sequence.getOffset()-diffLen<consensusB.getOffset() && sequence.getOffset()+sequence.getLength()+diffLen>=consensusB.getOffset()+consensusB.getLength()) {
@@ -326,6 +342,9 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         j--;
     }
     int newOffset=consensusB.getOffset()-diffLen+j;
+    qDebug()<<maxCol;
+    qDebug()<< j;
+    qDebug()<< newOffset;
 
     Read returnRead;
     returnRead.setSequence(final);
