@@ -37,8 +37,8 @@ int main()
 
     ifstream readsFile;
     ifstream layoutFile;
-    string readsLocation = "/home/dino/Documents/Bioinformatics-consensus/lib/reads.2k.10x2.fasta";
-    string layoutLocation = "/home/dino/Documents/Bioinformatics-consensus/lib/layouts2.afg";
+    string readsLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/reads.2k.10x.fasta";
+    string layoutLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/layouts2.afg";
 
     //string readsLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/reads.2k.10x2.fasta";
     //string layoutLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/layouts2.afg";
@@ -131,7 +131,6 @@ int main()
     for(int i=0; i < unitigs.size() ; i++){
 
         unitig = unitigs.at(i);
-
         consensusA = realigner.getAndScoreConsensus(unitig,&score);
         Read sequence;
         string seq;
@@ -148,7 +147,8 @@ int main()
 
         std::cout << consensusA  << " Consensus A ";
 
-        for(int k=0; k<=i && k<unitig.sequences.size(); k++){
+        int k;
+        for(k=0; k<unitig.sequences.size(); k++){
             sequence=unitig.sequences.at(k);
             unitig.removeSequence(k);
 
@@ -167,7 +167,8 @@ int main()
 
             //for petlja samo za ispis:
             std::cout << "New alignment:" << endl;
-            for(int j=0; j<i && j<unitig.sequences.size(); j++){
+            int j;
+            for(j=0; j<unitig.sequences.size(); j++){
                 sequence=unitig.sequences.at(j);
                 string seq=sequence.getSequence();
                 for(int i=0; i<sequence.getOffset();i++){

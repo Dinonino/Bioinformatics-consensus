@@ -58,7 +58,8 @@ char Realigner::getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score
     Nucleic_codes nc;
     map<char,int> frequency;
     Read sequence;
-    for(int i=0; i < unitig.sequences.size() ; i++){
+    int i;
+    for(i=0; i < unitig.sequences.size() ; i++){
         sequence = unitig.sequences.at(i);
         if(sequence.getOffset()<= colNum && sequence.getOffset()+sequence.getLength() > colNum){
             frequency[sequence.getSequence().at(colNum-sequence.getOffset())]++;
@@ -190,11 +191,12 @@ string Realigner::getAndScoreConsensus(Unitig unitig, int *score){
     string columnConsensus;
     stringstream ss;
 
-    for(int i=unitig.getStart(); i<unitig.getEnd(); i++){
-        columnConsensus = "";
-        ss << getAndScoreColumnConsensus(unitig, i,&columnScore);
-        ss >> columnConsensus;
-        consensus.append(columnConsensus);
+    int i;
+    for(i=unitig.getStart(); i<unitig.getEnd(); i++){
+
+      //  ss << getAndScoreColumnConsensus(unitig, i,&columnScore);
+      //  ss >> columnConsensus;
+        consensus.append(1, getAndScoreColumnConsensus(unitig, i,&columnScore));
         *score=*score+columnScore;
     }
 
