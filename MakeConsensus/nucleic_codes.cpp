@@ -1,6 +1,13 @@
 #include "nucleic_codes.h"
 
 
+    const char Nucleic_codes::dash = 1 << 4;
+    const char Nucleic_codes::A= 1 << 3;
+    const char Nucleic_codes::C= 1 << 2;
+    const char Nucleic_codes::G= 1 << 1;
+    const char Nucleic_codes::T= 1 << 0;
+    const char Nucleic_codes::all= dash | A | C | G | T;
+
 Nucleic_codes::Nucleic_codes()
 {
     fillCharToByteMap();

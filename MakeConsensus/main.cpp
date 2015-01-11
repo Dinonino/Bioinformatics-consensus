@@ -11,6 +11,7 @@
 #include "nucleic_codes.h"
 #include "consensus.h"
 
+using namespace std;
 
  vector<std::string> &split(const string &s, char delim, vector<string> &elems) {
         stringstream ss(s);
@@ -36,15 +37,24 @@ int main()
 
     ifstream readsFile;
     ifstream layoutFile;
-    string readsLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/reads.2k.10x.fasta\0";
-    string layoutLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensus/lib/layouts.afg\0";
+    string readsLocation = "/home/dino/Documents/Bioinformatics-consensus/lib/reads.2k.10x.fasta\0";
+    string layoutLocation = "/home/dino/Documents/Bioinformatics-consensus/lib/layouts.afg\0";
 
     vector<string> readsStringList;
     string readString="";
 
+    readsFile.open(readsLocation.c_str(), ifstream::in);
+    layoutFile.open(layoutLocation.c_str(), ifstream::in);
+
+
 
     if (!readsFile.is_open()){
-        std::cout << "Unable to open file";
+        std::cout << "Unable to open reaads file";
+        exit(-1);
+    }
+
+    if (!layoutFile.is_open()){
+        std::cout << "Unable to open layout file";
         exit(-1);
     }
 

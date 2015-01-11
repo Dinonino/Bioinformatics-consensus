@@ -13,17 +13,19 @@ public:
     char getCharFromByte(char byte);
     char getByteFromChar(char character);
 
-    static const char dash = 1 << 4;
-    static const char  A= 1 << 3;
-    static const char  C= 1 << 2;
-    static const char  G= 1 << 1;
-    static const char T= 1 << 0;
-    static const char all= dash | A | C | G | T;
+    static const char dash;
+    static const char A;
+    static const char C;
+    static const char G;
+    static const char T;
+    static const char all;
 private:
     map<char, char> charToByteMap;
     map<char, char> byteToCharMap;
     void fillCharToByteMap();
     void fillByteToCharMap();
 };
+
+
 
 #endif // NUCLEIC_CODES_H
