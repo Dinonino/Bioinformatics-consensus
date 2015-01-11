@@ -215,6 +215,7 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
 
 
     Consensus cons=consensusB.getSubConsensus(sequence.getOffset()-diffLen,len);
+
     int i,j;
     double match,insert,max=-1;
     int consLen=cons.getLength()+1;
@@ -227,11 +228,6 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         nw[i*consLen]=1000000000000;
         direction[i*seqLen]=-1;
     }
-
-
-
-
-
 
 
     /* Needleman Wunsch*/
@@ -276,7 +272,7 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
             convert.str("");
             str+=number+" ";
         }
-      //  qDebug()<<str;
+      //cout << str;
         str="";
     }
 
@@ -299,7 +295,7 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
             if((i-1)>sufixLen) out=i-sufixLen;
             if(end<(i-1)) out=seqLen-1-out;
             if(end<(i-1) && (i-seqLen)<sufixLen) out=consensusB.getLength();
-            double current=nw[(seqLen-1)*consLen+i]/out-0.25*(out/seqLen);
+            double current=nw[(seqLen-1)*consLen+i]/out-0.25*(out/(seqLen-1));
             if(max==-1 || current<max) {
                 max=nw[(seqLen-1)*consLen+i]/out;
                 maxCol=i;
@@ -317,7 +313,8 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         int out=1;
         for(i=1;i<consLen;i++) {
             if((i-1)>sufixLen) out=i-sufixLen;
-            double current=nw[(seqLen-1)*consLen+i]/out-0.25*(out/seqLen);
+            if(out>=(seqLen-1)) out=seqLen-1;
+            double current=nw[(seqLen-1)*consLen+i]/out-0.25*(out/(seqLen-1));
             if(max==-1 || current<max) {
                 max=current;
                 maxCol=i;
@@ -335,7 +332,7 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         int out=0;
         for(i=1;i<consLen;i++) {
             if(end<(i-1)) out=i-1-end;
-            double current=nw[(seqLen-1)*consLen+i]/(seqLen-1-out)-0.25*(out/seqLen);
+            double current=nw[(seqLen-1)*consLen+i]/(seqLen-1-out)-0.25*(out/(seqLen-1));
             if(max==-1 || current<max) {
                 max=current;
                 maxCol=i;
@@ -362,9 +359,7 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
     stringstream ss;
     while(i>0) {
         if(direction[i*consLen+j]) {
-            ss << seqString.at(i-1);
-            str = "";
-            ss >> str;
+           str= seqString.at(i-1);
            final.insert(0, str);
            i--;
         } else {

@@ -37,7 +37,7 @@ int main()
 
     ifstream readsFile;
     ifstream layoutFile;
-    string readsLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/reads.2k.10x.fasta";
+    string readsLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/reads.2k.10x2.fasta";
     string layoutLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/layouts2.afg";
 
     //string readsLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/reads.2k.10x2.fasta";
@@ -113,9 +113,7 @@ int main()
         Unitig unitig;
         unitig.sequences = unitigSequences;
 
-        for(int t=0; t<unitig.sequences.size(); t++){
-            cout << unitig.sequences.at(t).getSequence() << endl;
-        }
+
 
         unitig.setStartEnd();
         unitigs.push_back(unitig);
@@ -141,7 +139,7 @@ int main()
             for(int z=0; z<sequence.getOffset();z++){
                 seq.insert(0, " ");
             }
-           cout << k+1 << ". " << seq << endl;
+           cout << k+1 << "." << seq << endl;
 
         }
 
@@ -172,7 +170,7 @@ int main()
                 sequence=unitig.sequences.at(j);
                 string seq=sequence.getSequence();
                 for(int i=0; i<sequence.getOffset();i++){
-                    seq.insert(0, "  ");
+                    seq.insert(0, " ");
                 }
                 if(sequence.getOffset()>=0 && unitig.getStart()<0){
                     for(int i=unitig.getStart();i<0;i++){
