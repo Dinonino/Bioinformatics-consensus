@@ -37,8 +37,8 @@ int main()
 
     ifstream readsFile;
     ifstream layoutFile;
-    string readsLocation = "/home/dino/Documents/Bioinformatics-consensus/lib/reads.2k.10x.fasta\0";
-    string layoutLocation = "/home/dino/Documents/Bioinformatics-consensus/lib/layouts.afg\0";
+    string readsLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/reads.2k.10x2.fasta";
+    string layoutLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/layouts2.afg";
 
     vector<string> readsStringList;
     string readString="";
@@ -109,6 +109,7 @@ int main()
             }
         Unitig unitig;
         unitig.sequences = unitigSequences;
+        unitig.setStartEnd();
         unitigs.push_back(unitig);
     }
 
@@ -116,28 +117,29 @@ int main()
     layoutFile.close();
 
 
-    int i=10; //npr. i=10
+    int iterationNumber=10; //npr. i=10, još ga ne koristimo dolje zasad
     int score;
     Unitig unitig;
     string consensusA;
     for(int i=0; i < unitigs.size() ; i++){
-        unitig = unitigs.at(i);
-        consensusA = realigner.getAndScoreConsensus(unitig,&score);
 
+        unitig = unitigs.at(i);
+
+        consensusA = realigner.getAndScoreConsensus(unitig,&score);
         Read sequence;
         string seq;
         //ova funkcija je samo za ispis:
-        for(int k=0; k<i && k<unitig.sequences.size(); k++){
+        for(int k=0; k<unitig.sequences.size(); k++){
             sequence=unitig.sequences.at(k);
             seq=sequence.getSequence();
             for(int z=0; z<sequence.getOffset();z++){
                 seq.insert(0, " ");
             }
-            cerr << k+1 << ". " << seq << endl;
+           cout << k+1 << ". " << seq << endl;
 
         }
 
-        cerr << consensusA  << " Consensus A ";
+        std::cout << consensusA  << " Consensus A ";
 
         for(int k=0; k<i && k<unitig.sequences.size(); k++){
             sequence=unitig.sequences.at(k);
@@ -148,16 +150,16 @@ int main()
 
             sequence=realigner.align(consensusB, sequence, 0.1);
 
-            cerr << "sequence " << k+1 << "." << endl;
+            std::cout << "sequence " << k+1 << "." << endl;
 
             unitig.insertSequnce(k, sequence);
 
             int newScore;
-            cerr << consensusB.getSequence() <<" Consensus B" << endl;
+            std::cout << consensusB.getSequence() <<" Consensus B" << endl;
             consensusA=realigner.getConsensus2(unitig).getSequence();
 
             //for petlja samo za ispis:
-            cerr << "New alignment:" << endl;
+            std::cout << "New alignment:" << endl;
             for(int j=0; j<i && j<unitig.sequences.size(); j++){
                 sequence=unitig.sequences.at(j);
                 string seq=sequence.getSequence();
@@ -173,10 +175,10 @@ int main()
                         seq.insert(0, ".");
                     }
                 }
-                cerr << j+1 << "." << seq << endl;
+                std::cout << j+1 << "." << seq << endl;
 
             }
-            cerr << consensusA << " New consensus A, offset: " << unitig.getStart();
+            std::cout << consensusA << " New consensus A, offset: " << unitig.getStart();
            // if (newScore > score) break;   todo:change scoring function
 
         }
