@@ -37,8 +37,11 @@ int main()
 
     ifstream readsFile;
     ifstream layoutFile;
-    string readsLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/reads.2k.10x2.fasta";
-    string layoutLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/layouts2.afg";
+    string readsLocation = "/home/dino/Documents/Bioinformatics-consensus/lib/reads.2k.10x2.fasta";
+    string layoutLocation = "/home/dino/Documents/Bioinformatics-consensus/lib/layouts2.afg";
+
+    //string readsLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/reads.2k.10x2.fasta";
+    //string layoutLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/layouts2.afg";
 
     vector<string> readsStringList;
     string readString="";
@@ -109,10 +112,14 @@ int main()
             }
         Unitig unitig;
         unitig.sequences = unitigSequences;
+
+        for(int t=0; t<unitig.sequences.size(); t++){
+            cout << unitig.sequences.at(t).getSequence() << endl;
+        }
+
         unitig.setStartEnd();
         unitigs.push_back(unitig);
     }
-
 
     layoutFile.close();
 
@@ -141,7 +148,7 @@ int main()
 
         std::cout << consensusA  << " Consensus A ";
 
-        for(int k=0; k<i && k<unitig.sequences.size(); k++){
+        for(int k=0; k<=i && k<unitig.sequences.size(); k++){
             sequence=unitig.sequences.at(k);
             unitig.removeSequence(k);
 
