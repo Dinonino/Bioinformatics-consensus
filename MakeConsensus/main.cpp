@@ -37,8 +37,8 @@ int main()
 
     ifstream readsFile;
     ifstream layoutFile;
-    string readsLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/reads.2k.10x.fasta";
-    string layoutLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/layouts.afg";
+    string readsLocation = "C:/Users/Pickles/Desktop/Bioinformatiks/Bioinformatics-consensus/lib/reads.2k.10x2.fasta";
+    string layoutLocation = "C:/Users/Pickles/Desktop/Bioinformatiks/Bioinformatics-consensus/lib/layouts2.afg";
 
     //string readsLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/reads.2k.10x2.fasta";
     //string layoutLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/layouts2.afg";

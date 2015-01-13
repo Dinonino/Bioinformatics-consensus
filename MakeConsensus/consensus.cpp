@@ -52,10 +52,10 @@ Consensus Consensus::getSubConsensus(int offset, int length)
     Consensus newCons;
     newCons.setOffset(offset);
 
-    cerr << offset << endl;
+    /*cerr << offset << endl;
     cerr << length << endl;
     cerr << this->getLength() << endl;
-    cerr <<this->getOffset();
+    cerr <<this->getOffset();*/
     int i=0;
     for(i=0;i<length;i++) {
         if((i+offset)<(this->offset) || (i+offset)>=(this->offset+this->getLength())) {

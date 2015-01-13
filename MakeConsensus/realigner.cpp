@@ -203,6 +203,15 @@ string Realigner::getAndScoreConsensus(Unitig unitig, int *score){
     return consensus;
 }
 
+
+/**
+ * @brief Realigner::align Funkcija algin. Podešava trenutnu sekvencu s obzirom na ostale sekvence i njihov konsenzus. Trenutna sekvenca može poprimiti
+ *  novi offset koji može biti udaljen za maksimalno E*seqence.length.
+ * @param consensusB Konsenzus ostatka
+ * @param sequence Sekvenca koja se ravna s ostatkom.
+ * @param E Faktor maksimalnog pomaka sekvence, za najbolje rezultate predlažu se vrijednosti [0,0.1].
+ * @return Poravnata sekvenca s ostalim sekvencama i njihovim konsenzusom.
+ */
 Read Realigner::align(Consensus consensusB, Read sequence, double E)
 {
    // qDebug()<<"align funkcija";
@@ -225,12 +234,20 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         direction[i]=-1;
     }
     for(i=1;i<seqLen;i++) {
-        nw[i*consLen]=1000000000000;
+        nw[i*consLen]=100;
         direction[i*seqLen]=-1;
     }
 
 
-    /* Needleman Wunsch*/
+    /* Poedešeni Needleman Wunsch*/
+    /* Nije moguće umetati '-' u konsenzus,samo u sekvencu*/
+    /* Prvi red je postavljen na 0, pošto ne tražimo najbolji položaj sekvence s obzirom na konsenzus*/
+    /* Funkcija dobrote poprima vrijednosti [0,1] te dodatno kažnjava umetanje '-' s 0.25. Manji iznos je bolji niz*/
+    /* U slučaju da sekvenca nije podniz konsenzusa(npr. preklapanje prefiksa ili sufiksa) match se nagrađuje s -0.25, a za najbolji algin se uzima
+        onaj koji ima najmanji iznos funkcije dobrote po preklapajućem charu.*/
+    /* Dodatno inicijaliziramo polje smjera popunjavanja matrice kako bismo se lakše vratili na početak. Naime, pošto su vrijednosti u matrici
+        tipa double potrebno je zaokruživati vrijednosti da znamo otkrijemo put prema natrag. Zaokruživanje troši vrijeme, pa smo se odlučili na novu matricu
+        smjera koja samo privremeno troši memoriju*/
     for(i=1;i<seqLen;i++) {
         for(j=1;j<consLen;j++) {
             column col=cons.getColumn(j-1);
@@ -265,21 +282,33 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
     string str="";
     string number;
     ostringstream convert;
+    /* ISPIS needleman wunsch matrice*/
+    /*
+    for(i=0;i<cons.getSequence().length();i++) {
+        cout<<cons.getSequence().at(i)+"   ";
+    }
+    cout<<"\n";
     for(i=0;i<seqLen;i++) {
         for(j=0;j<consLen;j++) {
             convert << (nw[i*consLen+j]);
             number = convert.str();
             convert.str("");
             str+=number+" ";
+            int k;
+            for(k=number.length();k<6;k++) {
+                str+=" ";
+            }
         }
-      //cout << str;
+      cout << str<<"\n";
         str="";
-    }
+    }*/
 
 
 
 
     int maxCol;
+
+    /* Slučaj kada je moguće da je konsenzus ostatka podniz same sekvence, tj. sekvenca može biti dulja od konsenzusa.*/
     if(sequence.getOffset()-diffLen<consensusB.getOffset() && sequence.getOffset()+sequence.getLength()+diffLen>=consensusB.getOffset()+consensusB.getLength()) {
         int sufixLen=0,prefixLen=0;
         while(sufixLen<cons.getLength()-1 && cons.getColumn(sufixLen).total==0) {
@@ -304,7 +333,8 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         }
 
     }
-    else if(sequence.getOffset()-diffLen<consensusB.getOffset()) {//sufiks-prefiks
+    /* Preklapanje sufiksa sekvence s prefiksom konsenzusa*/
+    else if(sequence.getOffset()-diffLen<consensusB.getOffset()) {
 
         int sufixLen=0;
         while(sufixLen<cons.getLength()-1 && cons.getColumn(sufixLen).total==0) {
@@ -322,7 +352,8 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
             out=1;
         }
 
-    } else if(sequence.getOffset()+sequence.getLength()+diffLen>=consensusB.getOffset()+consensusB.getLength()) {//prefiks-sufiks
+    } /* Preklapanje prefiksa sekvence s sufiksom konsenzusa*/
+    else if(sequence.getOffset()+sequence.getLength()+diffLen>=consensusB.getOffset()+consensusB.getLength()) {
         int prefixLen=0;
         while(prefixLen<cons.getLength()-1 && cons.getColumn(consLen-2-prefixLen).total==0) {
             prefixLen++;
@@ -340,7 +371,9 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
             out=0;
         }
 
-    } else {//podniz
+    }
+    /* Sekvenca je podniz lonsenzusa*/
+    else {
        for(i=1;i<consLen;i++) {
            if(max==-1 || nw[(seqLen-1)*consLen+i]<max) {
                max=nw[(seqLen-1)*consLen+i];
@@ -368,12 +401,12 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         j--;
     }
     int newOffset=cons.getOffset()+j;
-    cerr << "novo" << endl;
+    /*cerr << "novo" << endl;
     cerr << "maxCol: " << maxCol << endl;
     cerr << "j: " << j << endl;
     cerr << "newoffset: "<< newOffset << endl;
     cerr << "cons.offset: " << cons.getOffset() << endl;
-    cerr << "difflen: "<< diffLen << endl;
+    cerr << "difflen: "<< diffLen << endl;*/
 
     Read returnRead;
     returnRead.setSequence(final);
