@@ -14,6 +14,9 @@ Nucleic_codes::Nucleic_codes()
     fillByteToCharMap();
 }
 
+/**
+ * @brief Nucleic_codes::fillCharToByteMap Metoda za popunjavanje mape koja sadrži podatke o sadržanim bajtovima na temelju danog znaka
+ */
 void Nucleic_codes::fillCharToByteMap(){
     charToByteMap['A']= A;
     charToByteMap['C']= C;
@@ -52,6 +55,9 @@ void Nucleic_codes::fillCharToByteMap(){
 
 }
 
+/**
+ * @brief Nucleic_codes::fillByteToCharMap Metoda za popunjavanje mape koja sadrži podatke o sadržanim znaku na temelju danog bajta.
+ */
 void Nucleic_codes::fillByteToCharMap(){
     byteToCharMap[A]='A';
     byteToCharMap[C]='C';
@@ -92,18 +98,36 @@ void Nucleic_codes::fillByteToCharMap(){
 
 }
 
+/**
+ * @brief Nucleic_codes::getCharToByteMap Metoda za dohvaćanje mape koja sadrži podatke o sadržanim bajtovima na temelju danog znaka
+ * @return Mapa koja sadrži podatke o sadržanim bajtovima na temelju danog znaka
+ */
 map<char,unsigned char> Nucleic_codes::getCharToByteMap(){
     return charToByteMap;
 }
 
+/**
+ * @brief Nucleic_codes::getByteToCharMap Metoda za dohvaćanje mape koja sadrži podatke o sadržanim znaku na temelju danog bajta
+ * @return Mape koja sadrži podatke o sadržanim znaku na temelju danog bajta
+ */
 map<unsigned char,char> Nucleic_codes::getByteToCharMap(){
     return byteToCharMap;
 }
 
+/**
+ * @brief Nucleic_codes::getCharFromByte Metoda koja na temelju primljenog bajta vraća odgovarajući znak iz mape sa znakovima.
+ * @param byte Bajt
+ * @return Odgovarajući znak
+ */
 char Nucleic_codes::getCharFromByte(unsigned char byte){
     return byteToCharMap[byte];
 }
 
+/**
+ * @brief Nucleic_codes::getByteFromChar Metoda koja na temelju primljenog znaka vraća njegovu odgovarajuću vrijednost u bajtovima.
+ * @param character Znak
+ * @return Odgovarajući bajt.
+ */
 unsigned char Nucleic_codes::getByteFromChar(char character){
     return charToByteMap[character];
 }

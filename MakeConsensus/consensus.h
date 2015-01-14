@@ -13,6 +13,9 @@ typedef struct {
     int total;
 } column;
 
+/**
+ * @brief The Consensus class Klasa koja predstavlja konsenzusni slijed
+ */
 class Consensus
 {
 private:

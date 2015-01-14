@@ -3,7 +3,9 @@
 #include "read.h"
 #include <vector>
 
-
+/**
+ * @brief The Unitig class Klasa koja predstavlja unitig, tj. poravnanje s približnim rasporedom.
+ */
 class Unitig
 {
 public:

@@ -11,6 +11,15 @@ Realigner::Realigner()
 {
 }
 
+/**
+ * @brief Realigner::getAndScoreColumnConsensus Metoda korištena za računanje konsenzusa
+ *       jedne kolumne te za vraćanje ocjena tog konsenzusa
+ * @param unitig Promatrani unitig
+ * @param colNum Indeks kolumne
+ * @param score1 Prva ocjena
+ * @param score2 Druga ocjena
+ * @return Konsenzus jedne kolumne
+ */
 char Realigner::getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score1, double *score2){
     Nucleic_codes nc;
     map<char,int> frequency;
@@ -52,6 +61,11 @@ char Realigner::getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score
 
 }
 
+/**
+ * @brief Realigner::getConsensus2 Metoda koja izračunava konsenzus na temelju primljenog unitiga
+ * @param unitig Promatrani unitig
+ * @return Konsenzus
+ */
 Consensus Realigner::getConsensus2(Unitig unitig)
 {
     Consensus consensus;
@@ -64,6 +78,12 @@ Consensus Realigner::getConsensus2(Unitig unitig)
     return consensus;
 }
 
+/**
+ * @brief Realigner::getColumnConsensus2 Metoda koja vraća konsenzus jedne kolumne
+ * @param unitig Promatrani unitif
+ * @param colNum Indeks kolumne
+ * @return
+ */
 column Realigner::getColumnConsensus2(Unitig unitig, int colNum)
 {
     Nucleic_codes nc;
@@ -113,7 +133,12 @@ column Realigner::getColumnConsensus2(Unitig unitig, int colNum)
     return ret;
 }
 
-
+/**
+ * @brief Realigner::getAndScoreConsensus Metoda koja izračunava konsenzus i njegovu ocjenu na temelju primljenog unitiga
+ * @param unitig Promatrani unitig
+ * @param score Ocjena konsenzusa
+ * @return
+ */
 string Realigner::getAndScoreConsensus(Unitig unitig, double *score){
     string consensus="";
 

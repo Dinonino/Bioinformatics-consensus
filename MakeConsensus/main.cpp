@@ -11,7 +11,13 @@
 
 using namespace std;
 
-
+/**
+  * @brief split Method for spliting string by delimiter
+  * @param s String that needs to be split
+  * @param delim Delimiter
+  * @param elems Result of spliting string
+  * @return
+  */
  vector<std::string> &split(const string &s, char delim, vector<string> &elems) {
         stringstream ss(s);
         string item;
@@ -22,12 +28,17 @@ using namespace std;
         return elems;
     }
 
-    vector<std::string> split(const string &s, char delim) {
+vector<std::string> split(const string &s, char delim) {
         vector<string> elems;
         split(s, delim, elems);
         return elems;
-    }
+}
 
+/**
+ * @brief writeConsensus Method for writing consensus in file and on standard output.
+ * @param consensus Consensus
+ * @param file
+ */
 void writeConsensus(Consensus consensus, ofstream* file){
     *file << "<\n";
     Nucleic_codes nc;
@@ -77,6 +88,10 @@ void writeConsensus(Consensus consensus, ofstream* file){
     *file <<"\n";
 }
 
+/**
+ * @brief printAlignment Method for printing unitig on standard output
+ * @param unitig Unitig that will be printed
+ */
 void printAlignment (Unitig unitig){
     Read sequence;
     int j;
@@ -102,6 +117,11 @@ void printAlignment (Unitig unitig){
     cout << "--------------------------\n";
 }
 
+/**
+ * @brief readReads Method used for reading reads from file
+ * @param readsLocation Reads location path
+ * @return Vector of reads
+ */
 vector<string> readReads(string readsLocation){
      ifstream readsFile;
      string readString="";
@@ -131,6 +151,12 @@ vector<string> readReads(string readsLocation){
      return readsStringList;
 }
 
+/**
+ * @brief readLayout Method used for reading layout from file
+ * @param layoutLocation Layout location path
+ * @param readsStringList Vector of ureads
+ * @return Vector of unitigs
+ */
 vector<Unitig> readLayout(string layoutLocation, vector<string> readsStringList){
     ifstream layoutFile;
     layoutFile.open(layoutLocation.c_str(), ifstream::in);
@@ -236,6 +262,18 @@ int main(int argc, char* argv[])
     Consensus consensusA;
     Read sequence;
 
+    /*
+     * Pseudokod:
+     *
+     za svaki unitig radi
+        za k=1 do  k=broj koraka
+            izdvoji k-to očitanje iz unitiga
+            od ostalih očitanja napravi novi (privremeni) konsenzus
+            poravnaj izdvojeno očitanje s privremenim konsezusom
+            vrati izdvojeno očitanje u unitig
+        izračunaj novi konsenzus unitiga i spremi ga
+
+     */
     for(int i=0; i < unitigs.size() ; i++){
 
         unitig = unitigs.at(i);

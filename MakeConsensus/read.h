@@ -5,6 +5,9 @@
 
 using namespace std;
 
+/**
+ * @brief The Read class Klasa koja predstavlja jedno očitanje unutar unitiga.
+ */
 class Read
 {
 private:
