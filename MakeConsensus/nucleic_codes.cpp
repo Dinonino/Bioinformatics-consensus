@@ -1,12 +1,12 @@
 #include "nucleic_codes.h"
 
 
-    const char Nucleic_codes::dash = 1 << 4;
-    const char Nucleic_codes::A= 1 << 3;
-    const char Nucleic_codes::C= 1 << 2;
-    const char Nucleic_codes::G= 1 << 1;
-    const char Nucleic_codes::T= 1 << 0;
-    const char Nucleic_codes::all= dash | A | C | G | T;
+    const unsigned char Nucleic_codes::dash = 1 << 4;
+    const unsigned char Nucleic_codes::A= 1 << 3;
+    const unsigned char Nucleic_codes::C= 1 << 2;
+    const unsigned char Nucleic_codes::G= 1 << 1;
+    const unsigned char Nucleic_codes::T= 1 << 0;
+    const unsigned char Nucleic_codes::all= dash | A | C | G | T;
 
 Nucleic_codes::Nucleic_codes()
 {
@@ -42,7 +42,7 @@ void Nucleic_codes::fillCharToByteMap(){
     charToByteMap['P']= C | A | dash;
     charToByteMap['U']= C | G | dash;
     charToByteMap['Z']= T | A | dash;
-    charToByteMap['X']= C | G | dash;
+    charToByteMap['X']= T | G | dash;
 
     charToByteMap['!']= C | T | G | dash;
     charToByteMap['#']= A | T | G | dash;
@@ -82,7 +82,7 @@ void Nucleic_codes::fillByteToCharMap(){
     byteToCharMap[C | A | dash]='P';
     byteToCharMap[C | G | dash]='U';
     byteToCharMap[T | A | dash]='Z';
-    byteToCharMap[C | G | dash]='X';
+    byteToCharMap[T | G | dash]='X';
 
     byteToCharMap[C | T | G | dash]='!';
     byteToCharMap[A | T | G | dash]='#';
@@ -92,18 +92,18 @@ void Nucleic_codes::fillByteToCharMap(){
 
 }
 
-map<char,char> Nucleic_codes::getCharToByteMap(){
+map<char,unsigned char> Nucleic_codes::getCharToByteMap(){
     return charToByteMap;
 }
 
-map<char,char> Nucleic_codes::getByteToCharMap(){
+map<unsigned char,char> Nucleic_codes::getByteToCharMap(){
     return byteToCharMap;
 }
 
-char Nucleic_codes::getCharFromByte(char byte){
+char Nucleic_codes::getCharFromByte(unsigned char byte){
     return byteToCharMap[byte];
 }
 
-char Nucleic_codes::getByteFromChar(char character){
+unsigned char Nucleic_codes::getByteFromChar(char character){
     return charToByteMap[character];
 }

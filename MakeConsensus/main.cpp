@@ -1,10 +1,8 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <sstream>
-#include <algorithm>
 #include <list>
 #include <vector>
-
 #include "read.h"
 #include "unitig.h"
 #include "realigner.h"
@@ -12,6 +10,7 @@
 #include "consensus.h"
 
 using namespace std;
+
 
  vector<std::string> &split(const string &s, char delim, vector<string> &elems) {
         stringstream ss(s);
@@ -29,55 +28,120 @@ using namespace std;
         return elems;
     }
 
-int main()
-{
-    Realigner realigner;
+void writeConsensus(Consensus consensus, ofstream* file){
+    *file << "<\n";
+    Nucleic_codes nc;
 
+    string consensusSeq=consensus.getSequence();
+    for(int i=0; i<consensusSeq.size(); i++){
+        vector<string> bases;
+        char consBase=consensusSeq.at(i);
+
+        if(consBase=='N'){
+            *file <<"N";
+            continue;
+        }
+
+        unsigned char byte=nc.getByteFromChar(consBase);
+
+        if((byte & nc.A) > 0){
+            bases.push_back("A");
+        }
+        if((byte & nc.C) > 0){
+            bases.push_back("C");
+        }
+        if((byte & nc.T) > 0){
+            bases.push_back("T");
+        }
+        if((byte & nc.G)> 0){
+            bases.push_back("G");
+        }
+        if((byte & nc.dash) > 0){
+            bases.push_back("-");
+        }
+
+        if(bases.size()>1){
+            *file <<"[";
+
+            for(int j=0; j<bases.size(); j++){
+                *file<<bases[j];
+            }
+
+            *file <<"]";
+        }else {
+            *file<<consBase;
+        }
+
+
+    }
+    *file <<"\n";
+}
+
+void printAlignment (Unitig unitig){
+    Read sequence;
+    int j;
+    for(j=0; j<unitig.sequences.size(); j++){
+        sequence=unitig.sequences.at(j);
+        string seq=sequence.getSequence();
+        for(int i=0; i<sequence.getOffset();i++){
+            seq.insert(0, " ");
+        }
+        if(sequence.getOffset()>=0 && unitig.getStart()<0){
+            for(int i=unitig.getStart();i<0;i++){
+                seq.insert(0, ".");
+            }
+        } else if(sequence.getOffset()<0 && sequence.getOffset()!=unitig.getStart()){
+            for(int i=0; i<sequence.getOffset()-unitig.getStart(); i++){
+                seq.insert(0, ".");
+            }
+        }
+        cout << j+1 << ". " << seq << endl;
+
+    }
+
+    cout << "--------------------------\n";
+}
+
+vector<string> readReads(string readsLocation){
+     ifstream readsFile;
+     string readString="";
+     vector<string> readsStringList;
+
+     readsFile.open(readsLocation.c_str(), ifstream::in);
+
+     if (!readsFile.is_open()){
+         cout << "Unable to open reads file (first argument)";
+         exit(-1);
+     }
+     string line;
+
+     while (!readsFile.eof()) {
+         getline(readsFile, line);
+         while(line.at(0)!='>'){
+             readString+=line;
+             getline(readsFile, line);
+             if(readsFile.eof()) break;
+         }
+         if(readString.length() == 0) continue;
+         readsStringList.push_back(readString);
+         readString="";
+     }
+
+     readsFile.close();
+     return readsStringList;
+}
+
+vector<Unitig> readLayout(string layoutLocation, vector<string> readsStringList){
+    ifstream layoutFile;
+    layoutFile.open(layoutLocation.c_str(), ifstream::in);
     vector<Unitig> unitigs;
 
-    ifstream readsFile;
-    ifstream layoutFile;
-   // string readsLocation = "C:/Users/Pickles/Desktop/Bioinformatiks/Bioinformatics-consensus/lib/reads.2k.10x2.fasta";
-   // string layoutLocation = "C:/Users/Pickles/Desktop/Bioinformatiks/Bioinformatics-consensus/lib/layouts2.afg";
-
-    string readsLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/reads.2k.10x2.fasta";
-    string layoutLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/layouts2.afg";
-
-    vector<string> readsStringList;
-    string readString="";
-
-    readsFile.open(readsLocation.c_str(), ifstream::in);
-    layoutFile.open(layoutLocation.c_str(), ifstream::in);
-
-
-
-    if (!readsFile.is_open()){
-        std::cout << "Unable to open reaads file";
-        exit(-1);
-    }
-
     if (!layoutFile.is_open()){
-        std::cout << "Unable to open layout file";
+        cout << "Unable to open layout file (second argument)";
         exit(-1);
     }
-
 
     string line;
-    while (!readsFile.eof()) {
-        getline(readsFile, line);
-        while(line.at(0)!='>'){
-            readString+=line;
-            getline(readsFile, line);
-            if(readsFile.eof()) break;
-        }
-        if(readString.length() == 0) continue;
-        readsStringList.push_back(readString);
-        readString="";
-    }
-
-    readsFile.close();
-
-
     while (!layoutFile.eof()) {
         getline(layoutFile, line);
         if(line.compare("{LAY")==0) continue;
@@ -106,7 +170,6 @@ int main()
                 string reverseSequence=cstr;
                 sequence->setSequence(reverseSequence.substr(0,start-end));
             }
-            // qDebug() << sequence->getSequence();
             unitigSequences.push_back(*sequence);
             delete sequence;
             }
@@ -120,78 +183,95 @@ int main()
     }
 
     layoutFile.close();
+    return unitigs;
+}
 
 
-    int iterationNumber=10; //npr. =10
-    double score;
+
+int main(int argc, char* argv[])
+{
+    Realigner realigner;
+    vector<string> readsStringList;
+    vector<Unitig> unitigs;
+
+    if(argc < 5){
+        cout << "Not enough parameters. You must enter file path to reads, file path to layout, number of iterations and error rate";
+        exit(-1);
+    }
+
+    int iterationNumber;
+    try {
+        iterationNumber=stoi(argv[3]);
+    } catch(exception e){
+        cout << "Number of iterations ( third argument) must be int number";
+        exit(-1);
+    }
+
+    double errorRate;
+    try {
+        errorRate=stod(argv[4]);
+    } catch(exception e){
+        cout << "Error rate ( fourth argument) must be some real number";
+        exit(-1);
+    }
+
+
+    ofstream consensusFile;
+    ofstream oldConsensusFile;
+
+    string readsLocation = argv[1];
+    string layoutLocation = argv[2];
+    string consensusResultLocation="consensus.txt";
+    string oldConsensusLocation="old_consesnsus.txt";
+
+    readsStringList=readReads(readsLocation);
+    unitigs=readLayout(layoutLocation, readsStringList);
+
+    consensusFile.open(consensusResultLocation.c_str(), ofstream::out);
+    oldConsensusFile.open(oldConsensusLocation.c_str(), ofstream::out);
+
+
+
     Unitig unitig;
-    string consensusA;
+    Consensus consensusA;
+    Read sequence;
+
     for(int i=0; i < unitigs.size() ; i++){
 
         unitig = unitigs.at(i);
-        consensusA = realigner.getAndScoreConsensus(unitig,&score);
-        Read sequence;
-        string seq;
-        //ova funkcija je samo za ispis:
-        for(int k=0; k<unitig.sequences.size(); k++){
-            sequence=unitig.sequences.at(k);
-            seq=sequence.getSequence();
-            for(int z=0; z<sequence.getOffset();z++){
-                seq.insert(0, " ");
-            }
-           cout << k+1 << "." << seq << endl;
+        consensusA = realigner.getConsensus2(unitig);
 
-        }
+        printAlignment(unitig);
+        cout << "   " << consensusA.getSequence()  << " Consensus A\n ";
+        writeConsensus(realigner.getConsensus2(unitig), &oldConsensusFile);
 
-        std::cout << consensusA  << " Consensus A ";
-
-        int k;
-        for(k=0; k<unitig.sequences.size() && k<=iterationNumber; k++){
+        for(int k=0; k<unitig.sequences.size() && k<=iterationNumber; k++){
             sequence=unitig.sequences.at(k);
             unitig.removeSequence(k);
 
             Consensus consensusB=realigner.getConsensus2(unitig);
             consensusB.setOffset(unitig.getStart());
 
-            sequence=realigner.align(consensusB, sequence, 0.1);
-
-            std::cout << "sequence " << k+1 << "." << endl;
+            sequence=realigner.align(consensusB, sequence, errorRate);
 
             unitig.insertSequnce(k, sequence);
 
-            double newScore;
-            std::cout << consensusB.getSequence() <<" Consensus B" << endl;
-            consensusA=realigner.getConsensus2(unitig).getSequence();
+            consensusA=realigner.getConsensus2(unitig);
 
-            //for petlja samo za ispis:
-            std::cout << "New alignment:" << endl;
-            int j;
-            for(j=0; j<unitig.sequences.size(); j++){
-                sequence=unitig.sequences.at(j);
-                string seq=sequence.getSequence();
-                for(int i=0; i<sequence.getOffset();i++){
-                    seq.insert(0, " ");
-                }
-                if(sequence.getOffset()>=0 && unitig.getStart()<0){
-                    for(int i=unitig.getStart();i<0;i++){
-                        seq.insert(0, ".");
-                    }
-                } else if(sequence.getOffset()<0 && sequence.getOffset()!=unitig.getStart()){
-                    for(int i=0; i<sequence.getOffset()-unitig.getStart(); i++){
-                        seq.insert(0, ".");
-                    }
-                }
-                std::cout << j+1 << "." << seq << endl;
-
-            }
-            std::cout << consensusA << " New consensus A, offset: " << unitig.getStart();
-           // if (newScore > score) break;   todo:change scoring function
+            cout << "\nNew alignment:" << endl;
+            printAlignment(unitig);
+            cout << "   " << consensusA.getSequence() << " New consensus A\n" ;
 
         }
 
+        writeConsensus(consensusA, &consensusFile);
+        cout<<"\nend of unitig\n\n";
+
+
     }
 
-
+    consensusFile.close();
+    oldConsensusFile.close();
     return 0;
 }
 

@@ -11,7 +11,6 @@ Realigner::Realigner()
 {
 }
 
-
 char Realigner::getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score1, double *score2){
     Nucleic_codes nc;
     map<char,int> frequency;
@@ -56,9 +55,6 @@ char Realigner::getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score
 Consensus Realigner::getConsensus2(Unitig unitig)
 {
     Consensus consensus;
- /*   for(int i=0; i<unitig.getStart() ; i++){
-        consensus.append(" ");  // or '-' or '&', i'm not sure (here consensus doesn't exist but we keep track of offset of consensus)
-    }*/
 
     for(int i=unitig.getStart(); i<unitig.getEnd(); i++){
         column columnConsensus=getColumnConsensus2(unitig, i);
@@ -95,12 +91,7 @@ column Realigner::getColumnConsensus2(Unitig unitig, int colNum)
             max=iter->second;
         }
     }
-    /*int mismatch;
-    foreach(int value, frequency){
-        if(value<max){
-            mismatch+=value;
-        }
-    }*/
+
     ret.total=total;
     ret.freq=frequency;
 
@@ -110,7 +101,6 @@ column Realigner::getColumnConsensus2(Unitig unitig, int colNum)
         return ret;
     }
 
-    // qDebug() << "\nmax: " << max;
     char result=0;
     for (iter = frequency.begin(); iter != frequency.end(); iter++){
         if(iter->second==max){
@@ -118,7 +108,7 @@ column Realigner::getColumnConsensus2(Unitig unitig, int colNum)
 
         }
     }
-   // qDebug() << "------ " << nc.getCharFromByte(result) ;
+
     ret.chatAt=nc.getCharFromByte(result);
     return ret;
 }
@@ -126,14 +116,10 @@ column Realigner::getColumnConsensus2(Unitig unitig, int colNum)
 
 string Realigner::getAndScoreConsensus(Unitig unitig, double *score){
     string consensus="";
- /*   for(int i=0; i<unitig.getStart() ; i++){
-        consensus.append(" ");  // or '-' or '&', i'm not sure (here consensus doesn't exist but we keep track of offset of consensus)
-    }*/
 
     int columnScore1;
     double columnScore2;
     *score=0;
-    string columnConsensus;
     
     int score1=0;
     double score2=0;
@@ -141,8 +127,6 @@ string Realigner::getAndScoreConsensus(Unitig unitig, double *score){
     int i;
     for(i=unitig.getStart(); i<unitig.getEnd(); i++){
 
-      //  ss << getAndScoreColumnConsensus(unitig, i,&columnScore);
-      //  ss >> columnConsensus;
         consensus.append(1, getAndScoreColumnConsensus(unitig, i,&columnScore1, &columnScore2));
         score1=score1+columnScore1;
         score2=score2+columnScore2;
@@ -163,7 +147,6 @@ string Realigner::getAndScoreConsensus(Unitig unitig, double *score){
  */
 Read Realigner::align(Consensus consensusB, Read sequence, double E)
 {
-   // qDebug()<<"align funkcija";
     Nucleic_codes nc;
     char dash=nc.dash;
     int diffLen=(int)(E*sequence.getLength());
@@ -211,10 +194,10 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
                 char  seqByte=nc.getByteFromChar(seqChar);
                 char consByte=nc.getByteFromChar(col.chatAt);
                 double matched=1,inserted=1;
-                //qDebug()<<seqChar<<","<<col.chatAt;
+
                 if((consByte&seqByte)>0) matched=0;
                 if((consByte&dash)>0) inserted=0;
-                //qDebug()<<QString::number(matched);
+
                 match=nw[(i-1)*consLen+j-1]+0.5*matched+0.5*(1-col.freq[seqChar]/col.total);
                 insert=nw[i*consLen+j-1]+0.25+0.5*inserted+0.5*(1-col.freq['-']/col.total);
                 if(match>insert) {
@@ -229,9 +212,10 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
     }
 
     string str="";
-    string number;
+
     /* ISPIS needleman wunsch matrice*/
     /*
+    string number;
     for(i=0;i<cons.getSequence().length();i++) {
         cout<<cons.getSequence().at(i)+"   ";
     }
@@ -250,9 +234,6 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
       cout << str<<"\n";
         str="";
     }*/
-
-
-
 
     int maxCol;
 
@@ -335,7 +316,6 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
     i=seqLen-1;
     j=maxCol;
 
-
     string seqString=sequence.getSequence();
     while(i>0) {
         if(direction[i*consLen+j]) {
@@ -348,12 +328,6 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         j--;
     }
     int newOffset=cons.getOffset()+j;
-    /*cerr << "novo" << endl;
-    cerr << "maxCol: " << maxCol << endl;
-    cerr << "j: " << j << endl;
-    cerr << "newoffset: "<< newOffset << endl;
-    cerr << "cons.offset: " << cons.getOffset() << endl;
-    cerr << "difflen: "<< diffLen << endl;*/
 
     Read returnRead;
     returnRead.setSequence(final);
@@ -361,21 +335,5 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
     free(direction);
     free(nw);
     return returnRead;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
