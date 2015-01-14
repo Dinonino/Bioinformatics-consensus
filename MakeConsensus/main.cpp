@@ -251,7 +251,6 @@ int main(int argc, char* argv[])
     string oldConsensusLocation="old_consesnsus.txt";
 
     readsStringList=readReads(readsLocation);
-    cout <<" reads";
     unitigs=readLayout(layoutLocation, readsStringList);
 
     consensusFile.open(consensusResultLocation.c_str(), ofstream::out);
