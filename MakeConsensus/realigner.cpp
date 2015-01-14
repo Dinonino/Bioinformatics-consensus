@@ -1,8 +1,7 @@
-#include "realigner.h"
+﻿#include "realigner.h"
 #include "nucleic_codes.h"
 
 #include <map>
-#include <sstream>
 #include <stdlib.h>
 #include <iostream>
 
@@ -12,57 +11,18 @@ Realigner::Realigner()
 {
 }
 
-char Realigner::getColumnConsensus(Unitig unitig, int colNum){
-    Nucleic_codes nc;
-    map<char,int> frequency;
-    Read sequence;
-    for(int i=0; i < unitig.sequences.size() ; i++){
-        sequence = unitig.sequences.at(i);
-        if(sequence.getOffset()<= colNum && sequence.getOffset()+sequence.getLength() > colNum){
-            frequency[sequence.getSequence().at(colNum-sequence.getOffset())]++;
-        }
-    }
 
-    int max=0;
-    map<char, int>::iterator iter;
-    for (iter = frequency.begin(); iter != frequency.end(); iter++){
-        if(iter->second>max){
-            max=iter->second;
-        }
-    }
-
-
-
-
-    if(max==0) return nc.getCharFromByte(nc.A | nc.C | nc.G | nc.T | nc.dash);
-
-
-    char result=0;
-
-
-    for (iter = frequency.begin(); iter != frequency.end(); ++iter){
-        if(iter->second==max){
-            result = result | nc.getByteFromChar(iter->first);
-        }
-    }
-
-
-
-    return nc.getCharFromByte(result);
-
-}
-
-
-
-char Realigner::getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score){
+char Realigner::getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score1, double *score2){
     Nucleic_codes nc;
     map<char,int> frequency;
     Read sequence;
     int i;
+    int numberOfColumns=0;
     for(i=0; i < unitig.sequences.size() ; i++){
         sequence = unitig.sequences.at(i);
         if(sequence.getOffset()<= colNum && sequence.getOffset()+sequence.getLength() > colNum){
             frequency[sequence.getSequence().at(colNum-sequence.getOffset())]++;
+	    numberOfColumns++;	
         }
     }
 
@@ -73,7 +33,8 @@ char Realigner::getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score
             max=iter->second;
         }
     }
-    *score=0;
+    *score1=0;
+    *score2=0;	
     if(max==0) return nc.getCharFromByte(nc.A | nc.C | nc.G | nc.T | nc.dash);
 
 
@@ -84,10 +45,10 @@ char Realigner::getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score
             result = result | nc.getByteFromChar(iter->first);
 
         } else {
-            *score=*score+iter->second;
+            *score1=*score1+iter->second;
         }
     }
-
+    *score2=*score1/numberOfColumns;	
     return nc.getCharFromByte(result);
 
 }
@@ -162,43 +123,31 @@ column Realigner::getColumnConsensus2(Unitig unitig, int colNum)
     return ret;
 }
 
-string Realigner::getConsensus(Unitig unitig){
 
-    string consensus="";
- /*   for(int i=0; i<unitig.getStart() ; i++){
-        consensus.append(" ");  // or '-' or '&', i'm not sure (here consensus doesn't exist but we keep track of offset of consensus)
-    }*/
-    string columnConsensus;
-    stringstream ss;
-    for(int i=unitig.getStart(); i<unitig.getEnd(); i++){
-        columnConsensus = "";
-        ss << getColumnConsensus(unitig, i);
-        ss >> columnConsensus;
-        consensus.append(columnConsensus);
-    }
-
-    return consensus;
-}
-
-string Realigner::getAndScoreConsensus(Unitig unitig, int *score){
+string Realigner::getAndScoreConsensus(Unitig unitig, double *score){
     string consensus="";
  /*   for(int i=0; i<unitig.getStart() ; i++){
         consensus.append(" ");  // or '-' or '&', i'm not sure (here consensus doesn't exist but we keep track of offset of consensus)
     }*/
 
-    int columnScore;
+    int columnScore1;
+    double columnScore2;
     *score=0;
     string columnConsensus;
-    stringstream ss;
+    
+    int score1=0;
+    double score2=0;
 
     int i;
     for(i=unitig.getStart(); i<unitig.getEnd(); i++){
 
       //  ss << getAndScoreColumnConsensus(unitig, i,&columnScore);
       //  ss >> columnConsensus;
-        consensus.append(1, getAndScoreColumnConsensus(unitig, i,&columnScore));
-        *score=*score+columnScore;
+        consensus.append(1, getAndScoreColumnConsensus(unitig, i,&columnScore1, &columnScore2));
+        score1=score1+columnScore1;
+        score2=score2+columnScore2;
     }
+    *score=0.5*score1+ 0.5*score2;
 
     return consensus;
 }
@@ -281,7 +230,6 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
 
     string str="";
     string number;
-    ostringstream convert;
     /* ISPIS needleman wunsch matrice*/
     /*
     for(i=0;i<cons.getSequence().length();i++) {
@@ -389,7 +337,6 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
 
 
     string seqString=sequence.getSequence();
-    stringstream ss;
     while(i>0) {
         if(direction[i*consLen+j]) {
            str= seqString.at(i-1);

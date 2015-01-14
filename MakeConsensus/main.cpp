@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
@@ -37,11 +37,11 @@ int main()
 
     ifstream readsFile;
     ifstream layoutFile;
-    string readsLocation = "C:/Users/Pickles/Desktop/Bioinformatiks/Bioinformatics-consensus/lib/reads.2k.10x2.fasta";
-    string layoutLocation = "C:/Users/Pickles/Desktop/Bioinformatiks/Bioinformatics-consensus/lib/layouts2.afg";
+   // string readsLocation = "C:/Users/Pickles/Desktop/Bioinformatiks/Bioinformatics-consensus/lib/reads.2k.10x2.fasta";
+   // string layoutLocation = "C:/Users/Pickles/Desktop/Bioinformatiks/Bioinformatics-consensus/lib/layouts2.afg";
 
-    //string readsLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/reads.2k.10x2.fasta";
-    //string layoutLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/layouts2.afg";
+    string readsLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/reads.2k.10x2.fasta";
+    string layoutLocation = "C:/Users/Josipa/Desktop/gitprojekti/Bioinformatics-consensusMasterWorking/lib/layouts2.afg";
 
     vector<string> readsStringList;
     string readString="";
@@ -122,8 +122,8 @@ int main()
     layoutFile.close();
 
 
-    int iterationNumber=10; //npr. i=10, još ga ne koristimo dolje zasad
-    int score;
+    int iterationNumber=10; //npr. =10
+    double score;
     Unitig unitig;
     string consensusA;
     for(int i=0; i < unitigs.size() ; i++){
@@ -159,7 +159,7 @@ int main()
 
             unitig.insertSequnce(k, sequence);
 
-            int newScore;
+            double newScore;
             std::cout << consensusB.getSequence() <<" Consensus B" << endl;
             consensusA=realigner.getConsensus2(unitig).getSequence();
 

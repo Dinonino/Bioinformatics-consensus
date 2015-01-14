@@ -11,13 +11,11 @@ class Realigner
 {
 public:
     Realigner();
-    string getConsensus(Unitig unitig);
-    string getAndScoreConsensus(Unitig unitig, int* score);
+    string getAndScoreConsensus(Unitig unitig, double* score);
     Read align(Consensus consensusB, Read sequence, double E);
     Consensus getConsensus2(Unitig unitig);
 private:
-    char getColumnConsensus(Unitig unitig, int colNum);
-    char getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score);
+    char getAndScoreColumnConsensus(Unitig unitig, int colNum, int *score1, double *score2);
     void align(Read sequence,string consensus,int e);
     column getColumnConsensus2(Unitig unitig, int colNum);
 
