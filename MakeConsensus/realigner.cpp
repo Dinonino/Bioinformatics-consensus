@@ -191,7 +191,7 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
         direction[i]=-1;
     }
     for(i=1;i<seqLen;i++) {
-        nw[i*consLen]=100;
+        nw[i*consLen]=1000000000;
         direction[i*seqLen]=-1;
     }
 
@@ -212,8 +212,14 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
                 double match,insert;
                 match=nw[(i-1)*consLen+j-1];
                 insert=nw[i*consLen+j-1]+0.25;
-                if(match>insert) nw[i*consLen+j]=insert;
-                else nw[i*consLen+j]=match;
+                if(match>insert) {
+		    nw[i*consLen+j]=insert;
+		    direction[i*consLen+j]=1;
+		}
+                else {
+		    nw[i*consLen+j]=match;
+		    direction[i*consLen+j]=0;
+		}
             } else {
                 char seqChar=sequence.getSequence().at(i-1);
                 char  seqByte=nc.getByteFromChar(seqChar);
