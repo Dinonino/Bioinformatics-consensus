@@ -170,9 +170,10 @@ vector<Unitig> readLayout(string layoutLocation, vector<string> readsStringList)
     string line;
     while (!layoutFile.eof()) {
         getline(layoutFile, line);
+        if(line.empty()) break;
         if(line.compare("{LAY")==0) continue;
         vector<Read> unitigSequences;
-        while(line.compare("}")!=0){
+        while(line.compare("}")!=0 ){
             Read* sequence=new Read();
             getline(layoutFile, line);
             string clr=split(line, ':')[1];
@@ -198,10 +199,10 @@ vector<Unitig> readLayout(string layoutLocation, vector<string> readsStringList)
             }
             unitigSequences.push_back(*sequence);
             delete sequence;
+
             }
         Unitig unitig;
         unitig.sequences = unitigSequences;
-
 
 
         unitig.setStartEnd();
@@ -274,6 +275,8 @@ int main(int argc, char* argv[])
         izračunaj novi konsenzus unitiga i spremi ga
 
      */
+
+
     for(int i=0; i < unitigs.size() ; i++){
 
         unitig = unitigs.at(i);

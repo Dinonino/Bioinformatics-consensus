@@ -214,11 +214,11 @@ Read Realigner::align(Consensus consensusB, Read sequence, double E)
                 insert=nw[i*consLen+j-1]+0.25;
                 if(match>insert) {
 		    nw[i*consLen+j]=insert;
-		    direction[i*consLen+j]=1;
+            direction[i*consLen+j]=0;
 		}
                 else {
 		    nw[i*consLen+j]=match;
-		    direction[i*consLen+j]=0;
+            direction[i*consLen+j]=1;
 		}
             } else {
                 char seqChar=sequence.getSequence().at(i-1);
