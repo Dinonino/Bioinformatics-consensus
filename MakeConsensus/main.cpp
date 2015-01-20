@@ -8,6 +8,7 @@
 #include "realigner.h"
 #include "nucleic_codes.h"
 #include "consensus.h"
+#include <algorithm>
 
 using namespace std;
 
