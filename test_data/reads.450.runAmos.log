@@ -1,0 +1,377 @@
+!!! 2015-01-20 18:52:57  Started by dino@UNKNOWN on Tue Jan 20 18:52:57 2015
+
+!!! 2015-01-20 18:52:57  Doing step 10:  Building AMOS bank
+!!! 2015-01-20 18:52:57  Running: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg
+START DATE: Tue Jan 20 18:52:57 2015
+Bank is: reads.450.bnk
+    0%                                            100%
+AFG ..................................................
+Messages read: 192
+Objects added: 192
+Objects deleted: 0
+Objects replaced: 0
+END DATE:   Tue Jan 20 18:52:57 2015
+!!! 2015-01-20 18:52:57  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:52:57  Doing step 20:  Running overlap
+!!! 2015-01-20 18:52:57  Running: /home/dino/Documents/proj/amos/bin/hash-overlap -B reads.450.bnk
+Starting on Tue Jan 20 18:52:57 2015
+
+Read bank is reads.450.bnk
+Alignment error rate is 0.06
+Minimum overlap bases is 40
+Be strand-specific: 0
+!!! 2015-01-20 18:52:57  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:52:57  Doing step 30:  Running contigger
+!!! 2015-01-20 18:52:57  Running: /home/dino/Documents/proj/amos/bin/tigger -b reads.450.bnk
+ Pulling reads from bank reads.450.bnk
+Pulled 95 reads from bank 
+ Pulling overlaps from bank reads.450.bnk
+ bank is empty
+ total contained reads hidden 0
+ number of contigs 95
+ total contained reads unhidden 0
+ Writing layouts to bank reads.450.bnk
+!!! 2015-01-20 18:52:57  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:52:57  Doing step 40:  Running consensus
+!!! 2015-01-20 18:52:57  Running: /home/dino/Documents/proj/amos/bin/make-consensus -B -b reads.450.bnk
+Starting on Tue Jan 20 18:52:57 2015
+
+Read bank is reads.450.bnk
+Alignment error rate is 0.06
+Minimum overlap bases is 5
+Output will be written to the bank
+Input is being read from the bank 
+Processed 0 layouts
+!!! 2015-01-20 18:52:57  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:52:57  Doing step 50:  Outputting contigs
+!!! 2015-01-20 18:52:57  Running: /home/dino/Documents/proj/amos/bin/bank2contig reads.450.bnk > reads.450.contig
+Processing reads.450.bnk at Tue Jan 20 18:52:57 2015
+End: Tue Jan 20 18:52:57 2015
+!!! 2015-01-20 18:52:57  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:52:57  Doing step 60:  Converting to FastA file
+!!! 2015-01-20 18:52:57  Running: /home/dino/Documents/proj/amos/bin/bank2fasta -b reads.450.bnk > reads.450.fasta
+!!! 2015-01-20 18:52:57  Done! Elapsed time:0d 0h 0m 0s
+
+!!! END - Elapsed time: 0d 0h 0m 0s
+
+!!! 2015-01-20 18:53:03  Started by dino@UNKNOWN on Tue Jan 20 18:53:03 2015
+
+!!! 2015-01-20 18:53:03  Doing step 10:  Building AMOS bank
+!!! 2015-01-20 18:53:03  Running: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg
+ERROR: Bank path already exists
+
+.USAGE.
+  /home/dino/Documents/proj/amos/bin/bank-transact  [options]  -b <bank path> -m <message path>
+Try '/home/dino/Documents/proj/amos/bin/bank-transact -h' for more information.
+!!! 2015-01-20 18:53:03  Command: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg exited with status: 1
+!!! END - Elapsed time: 0d 0h 0m 0s
+
+!!! 2015-01-20 18:53:09  Started by dino@UNKNOWN on Tue Jan 20 18:53:09 2015
+
+!!! 2015-01-20 18:53:09  Doing step 10:  Building AMOS bank
+!!! 2015-01-20 18:53:09  Running: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg
+START DATE: Tue Jan 20 18:53:09 2015
+Bank is: reads.450.bnk
+    0%                                            100%
+AFG ..................................................
+Messages read: 192
+Objects added: 192
+Objects deleted: 0
+Objects replaced: 0
+END DATE:   Tue Jan 20 18:53:09 2015
+!!! 2015-01-20 18:53:09  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:53:09  Doing step 20:  Running overlap
+!!! 2015-01-20 18:53:09  Running: /home/dino/Documents/proj/amos/bin/hash-overlap -B reads.450.bnk
+Starting on Tue Jan 20 18:53:09 2015
+
+Read bank is reads.450.bnk
+Alignment error rate is 0.06
+Minimum overlap bases is 40
+Be strand-specific: 0
+!!! 2015-01-20 18:53:09  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:53:09  Doing step 30:  Running contigger
+!!! 2015-01-20 18:53:09  Running: /home/dino/Documents/proj/amos/bin/tigger -b reads.450.bnk
+ Pulling reads from bank reads.450.bnk
+Pulled 95 reads from bank 
+ Pulling overlaps from bank reads.450.bnk
+ bank is empty
+ total contained reads hidden 0
+ number of contigs 95
+ total contained reads unhidden 0
+ Writing layouts to bank reads.450.bnk
+!!! 2015-01-20 18:53:09  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:53:09  Doing step 40:  Running consensus
+!!! 2015-01-20 18:53:09  Running: /home/dino/Documents/proj/amos/bin/make-consensus -B -b reads.450.bnk
+Starting on Tue Jan 20 18:53:09 2015
+
+Read bank is reads.450.bnk
+Alignment error rate is 0.06
+Minimum overlap bases is 5
+Output will be written to the bank
+Input is being read from the bank 
+Processed 0 layouts
+!!! 2015-01-20 18:53:09  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:53:09  Doing step 50:  Outputting contigs
+!!! 2015-01-20 18:53:09  Running: /home/dino/Documents/proj/amos/bin/bank2contig reads.450.bnk > reads.450.contig
+Processing reads.450.bnk at Tue Jan 20 18:53:09 2015
+End: Tue Jan 20 18:53:09 2015
+!!! 2015-01-20 18:53:09  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:53:09  Doing step 60:  Converting to FastA file
+!!! 2015-01-20 18:53:09  Running: /home/dino/Documents/proj/amos/bin/bank2fasta -b reads.450.bnk > reads.450.fasta
+!!! 2015-01-20 18:53:09  Done! Elapsed time:0d 0h 0m 0s
+
+!!! END - Elapsed time: 0d 0h 0m 0s
+
+!!! 2015-01-20 18:53:20  Started by dino@UNKNOWN on Tue Jan 20 18:53:20 2015
+
+!!! 2015-01-20 18:53:20  Doing step 10:  Building AMOS bank
+!!! 2015-01-20 18:53:20  Running: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg
+START DATE: Tue Jan 20 18:53:20 2015
+Bank is: reads.450.bnk
+    0%                                            100%
+AFG ..................................................
+Messages read: 192
+Objects added: 192
+Objects deleted: 0
+Objects replaced: 0
+END DATE:   Tue Jan 20 18:53:20 2015
+!!! 2015-01-20 18:53:20  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:53:20  Doing step 20:  Running overlap
+!!! 2015-01-20 18:53:20  Running: /home/dino/Documents/proj/amos/bin/hash-overlap -B reads.450.bnk
+Starting on Tue Jan 20 18:53:20 2015
+
+Read bank is reads.450.bnk
+Alignment error rate is 0.06
+Minimum overlap bases is 40
+Be strand-specific: 0
+!!! 2015-01-20 18:53:20  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:53:20  Doing step 30:  Running contigger
+!!! 2015-01-20 18:53:20  Running: /home/dino/Documents/proj/amos/bin/tigger -b reads.450.bnk
+ Pulling reads from bank reads.450.bnk
+Pulled 95 reads from bank 
+ Pulling overlaps from bank reads.450.bnk
+ bank is empty
+ total contained reads hidden 0
+ number of contigs 95
+ total contained reads unhidden 0
+ Writing layouts to bank reads.450.bnk
+!!! 2015-01-20 18:53:20  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:53:20  Doing step 40:  Running consensus
+!!! 2015-01-20 18:53:20  Running: /home/dino/Documents/proj/amos/bin/make-consensus -B -b reads.450.bnk
+Starting on Tue Jan 20 18:53:20 2015
+
+Read bank is reads.450.bnk
+Alignment error rate is 0.06
+Minimum overlap bases is 5
+Output will be written to the bank
+Input is being read from the bank 
+Processed 0 layouts
+!!! 2015-01-20 18:53:20  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:53:20  Doing step 50:  Outputting contigs
+!!! 2015-01-20 18:53:20  Running: /home/dino/Documents/proj/amos/bin/bank2contig reads.450.bnk > reads.450.contig
+Processing reads.450.bnk at Tue Jan 20 18:53:20 2015
+End: Tue Jan 20 18:53:20 2015
+!!! 2015-01-20 18:53:20  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:53:20  Doing step 60:  Converting to FastA file
+!!! 2015-01-20 18:53:20  Running: /home/dino/Documents/proj/amos/bin/bank2fasta -b reads.450.bnk > reads.450.fasta
+!!! 2015-01-20 18:53:20  Done! Elapsed time:0d 0h 0m 0s
+
+!!! END - Elapsed time: 0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:39  Started by dino@UNKNOWN on Tue Jan 20 18:54:39 2015
+
+!!! 2015-01-20 18:54:39  Doing step 10:  Building AMOS bank
+!!! 2015-01-20 18:54:39  Running: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg
+START DATE: Tue Jan 20 18:54:39 2015
+Bank is: reads.450.bnk
+    0%                                            100%
+AFG ..................................................
+Messages read: 200
+Objects added: 200
+Objects deleted: 0
+Objects replaced: 0
+END DATE:   Tue Jan 20 18:54:39 2015
+!!! 2015-01-20 18:54:39  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:39  Doing step 20:  Running overlap
+!!! 2015-01-20 18:54:39  Running: /home/dino/Documents/proj/amos/bin/hash-overlap -B reads.450.bnk
+Starting on Tue Jan 20 18:54:39 2015
+
+Read bank is reads.450.bnk
+Alignment error rate is 0.06
+Minimum overlap bases is 40
+Be strand-specific: 0
+!!! 2015-01-20 18:54:39  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:39  Doing step 30:  Running contigger
+!!! 2015-01-20 18:54:39  Running: /home/dino/Documents/proj/amos/bin/tigger -b reads.450.bnk
+ Pulling reads from bank reads.450.bnk
+Pulled 99 reads from bank 
+ Pulling overlaps from bank reads.450.bnk
+ bank is empty
+ total contained reads hidden 0
+ number of contigs 99
+ total contained reads unhidden 0
+ Writing layouts to bank reads.450.bnk
+!!! 2015-01-20 18:54:39  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:39  Doing step 40:  Running consensus
+!!! 2015-01-20 18:54:39  Running: /home/dino/Documents/proj/amos/bin/make-consensus -B -b reads.450.bnk
+Starting on Tue Jan 20 18:54:39 2015
+
+Read bank is reads.450.bnk
+Alignment error rate is 0.06
+Minimum overlap bases is 5
+Output will be written to the bank
+Input is being read from the bank 
+Processed 0 layouts
+!!! 2015-01-20 18:54:39  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:39  Doing step 50:  Outputting contigs
+!!! 2015-01-20 18:54:39  Running: /home/dino/Documents/proj/amos/bin/bank2contig reads.450.bnk > reads.450.contig
+Processing reads.450.bnk at Tue Jan 20 18:54:39 2015
+End: Tue Jan 20 18:54:39 2015
+!!! 2015-01-20 18:54:39  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:39  Doing step 60:  Converting to FastA file
+!!! 2015-01-20 18:54:39  Running: /home/dino/Documents/proj/amos/bin/bank2fasta -b reads.450.bnk > reads.450.fasta
+!!! 2015-01-20 18:54:39  Done! Elapsed time:0d 0h 0m 0s
+
+!!! END - Elapsed time: 0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:41  Started by dino@UNKNOWN on Tue Jan 20 18:54:41 2015
+
+!!! 2015-01-20 18:54:41  Doing step 10:  Building AMOS bank
+!!! 2015-01-20 18:54:41  Running: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg
+ERROR: Bank path already exists
+
+.USAGE.
+  /home/dino/Documents/proj/amos/bin/bank-transact  [options]  -b <bank path> -m <message path>
+Try '/home/dino/Documents/proj/amos/bin/bank-transact -h' for more information.
+!!! 2015-01-20 18:54:41  Command: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg exited with status: 1
+!!! END - Elapsed time: 0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:43  Started by dino@UNKNOWN on Tue Jan 20 18:54:43 2015
+
+!!! 2015-01-20 18:54:43  Doing step 10:  Building AMOS bank
+!!! 2015-01-20 18:54:43  Running: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg
+ERROR: Bank path already exists
+
+.USAGE.
+  /home/dino/Documents/proj/amos/bin/bank-transact  [options]  -b <bank path> -m <message path>
+Try '/home/dino/Documents/proj/amos/bin/bank-transact -h' for more information.
+!!! 2015-01-20 18:54:43  Command: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg exited with status: 1
+!!! END - Elapsed time: 0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:43  Started by dino@UNKNOWN on Tue Jan 20 18:54:43 2015
+
+!!! 2015-01-20 18:54:43  Doing step 10:  Building AMOS bank
+!!! 2015-01-20 18:54:43  Running: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg
+ERROR: Bank path already exists
+
+.USAGE.
+  /home/dino/Documents/proj/amos/bin/bank-transact  [options]  -b <bank path> -m <message path>
+Try '/home/dino/Documents/proj/amos/bin/bank-transact -h' for more information.
+!!! 2015-01-20 18:54:43  Command: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg exited with status: 1
+!!! END - Elapsed time: 0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:44  Started by dino@UNKNOWN on Tue Jan 20 18:54:44 2015
+
+!!! 2015-01-20 18:54:44  Doing step 10:  Building AMOS bank
+!!! 2015-01-20 18:54:44  Running: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg
+ERROR: Bank path already exists
+
+.USAGE.
+  /home/dino/Documents/proj/amos/bin/bank-transact  [options]  -b <bank path> -m <message path>
+Try '/home/dino/Documents/proj/amos/bin/bank-transact -h' for more information.
+!!! 2015-01-20 18:54:44  Command: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg exited with status: 1
+!!! END - Elapsed time: 0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:45  Started by dino@UNKNOWN on Tue Jan 20 18:54:45 2015
+
+!!! 2015-01-20 18:54:45  Doing step 10:  Building AMOS bank
+!!! 2015-01-20 18:54:45  Running: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg
+ERROR: Bank path already exists
+
+.USAGE.
+  /home/dino/Documents/proj/amos/bin/bank-transact  [options]  -b <bank path> -m <message path>
+Try '/home/dino/Documents/proj/amos/bin/bank-transact -h' for more information.
+!!! 2015-01-20 18:54:45  Command: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg exited with status: 1
+!!! END - Elapsed time: 0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:50  Started by dino@UNKNOWN on Tue Jan 20 18:54:50 2015
+
+!!! 2015-01-20 18:54:50  Doing step 10:  Building AMOS bank
+!!! 2015-01-20 18:54:50  Running: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.450.bnk -m reads.450.afg
+START DATE: Tue Jan 20 18:54:50 2015
+Bank is: reads.450.bnk
+    0%                                            100%
+AFG ..................................................
+Messages read: 200
+Objects added: 200
+Objects deleted: 0
+Objects replaced: 0
+END DATE:   Tue Jan 20 18:54:50 2015
+!!! 2015-01-20 18:54:50  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:50  Doing step 20:  Running overlap
+!!! 2015-01-20 18:54:50  Running: /home/dino/Documents/proj/amos/bin/hash-overlap -B reads.450.bnk
+Starting on Tue Jan 20 18:54:50 2015
+
+Read bank is reads.450.bnk
+Alignment error rate is 0.06
+Minimum overlap bases is 40
+Be strand-specific: 0
+!!! 2015-01-20 18:54:50  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:50  Doing step 30:  Running contigger
+!!! 2015-01-20 18:54:50  Running: /home/dino/Documents/proj/amos/bin/tigger -b reads.450.bnk
+ Pulling reads from bank reads.450.bnk
+Pulled 99 reads from bank 
+ Pulling overlaps from bank reads.450.bnk
+ bank is empty
+ total contained reads hidden 0
+ number of contigs 99
+ total contained reads unhidden 0
+ Writing layouts to bank reads.450.bnk
+!!! 2015-01-20 18:54:50  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:50  Doing step 40:  Running consensus
+!!! 2015-01-20 18:54:50  Running: /home/dino/Documents/proj/amos/bin/make-consensus -B -b reads.450.bnk
+Starting on Tue Jan 20 18:54:50 2015
+
+Read bank is reads.450.bnk
+Alignment error rate is 0.06
+Minimum overlap bases is 5
+Output will be written to the bank
+Input is being read from the bank 
+Processed 0 layouts
+!!! 2015-01-20 18:54:50  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:50  Doing step 50:  Outputting contigs
+!!! 2015-01-20 18:54:50  Running: /home/dino/Documents/proj/amos/bin/bank2contig reads.450.bnk > reads.450.contig
+Processing reads.450.bnk at Tue Jan 20 18:54:50 2015
+End: Tue Jan 20 18:54:50 2015
+!!! 2015-01-20 18:54:50  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 18:54:50  Doing step 60:  Converting to FastA file
+!!! 2015-01-20 18:54:50  Running: /home/dino/Documents/proj/amos/bin/bank2fasta -b reads.450.bnk > reads.450.fasta
+!!! 2015-01-20 18:54:50  Done! Elapsed time:0d 0h 0m 0s
+
+!!! END - Elapsed time: 0d 0h 0m 0s
+

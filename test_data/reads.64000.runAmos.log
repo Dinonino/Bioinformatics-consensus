@@ -1,0 +1,23 @@
+!!! 2015-01-20 13:47:27  Started by dino@UNKNOWN on Tue Jan 20 13:47:27 2015
+
+!!! 2015-01-20 13:47:27  Doing step 10:  Building AMOS bank
+!!! 2015-01-20 13:47:27  Running: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.64000.bnk -m reads.64000.afg
+START DATE: Tue Jan 20 13:47:27 2015
+Bank is: reads.64000.bnk
+    0%                                            100%
+AFG ..................................................
+Messages read: 96
+Objects added: 96
+Objects deleted: 0
+Objects replaced: 0
+END DATE:   Tue Jan 20 13:47:27 2015
+!!! 2015-01-20 13:47:27  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 13:47:27  Doing step 20:  Running overlap
+!!! 2015-01-20 13:47:27  Running: /home/dino/Documents/proj/amos/bin/hash-overlap -B reads.64000.bnk
+Starting on Tue Jan 20 13:47:27 2015
+
+Read bank is reads.64000.bnk
+Alignment error rate is 0.06
+Minimum overlap bases is 40
+Be strand-specific: 0
