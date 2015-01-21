@@ -1,0 +1,73 @@
+!!! 2015-01-20 13:45:48  Started by dino@UNKNOWN on Tue Jan 20 13:45:48 2015
+
+!!! 2015-01-20 13:45:48  Doing step 10:  Building AMOS bank
+!!! 2015-01-20 13:45:48  Running: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.2000.bnk -m reads.2000.afg
+START DATE: Tue Jan 20 13:45:48 2015
+Bank is: reads.2000.bnk
+    0%                                            100%
+AFG ..................................................
+Messages read: 126
+Objects added: 126
+Objects deleted: 0
+Objects replaced: 0
+END DATE:   Tue Jan 20 13:45:48 2015
+!!! 2015-01-20 13:45:48  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 13:45:48  Doing step 20:  Running overlap
+!!! 2015-01-20 13:45:48  Running: /home/dino/Documents/proj/amos/bin/hash-overlap -B reads.2000.bnk
+Starting on Tue Jan 20 13:45:48 2015
+
+Read bank is reads.2000.bnk
+Alignment error rate is 0.06
+Minimum overlap bases is 40
+Be strand-specific: 0
+!!! 2015-01-20 13:45:48  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 13:45:48  Doing step 30:  Running contigger
+!!! 2015-01-20 13:45:48  Running: /home/dino/Documents/proj/amos/bin/tigger -b reads.2000.bnk
+ Pulling reads from bank reads.2000.bnk
+Pulled 62 reads from bank 
+ Pulling overlaps from bank reads.2000.bnk
+Pulled 695 overlaps from bank 
+ total contained reads hidden 54
+ number of contigs 1
+this pass containment size is 54
+34 containment reads added back on this pass 
+ sub-total contained reads unhidden 34
+this pass containment size is 20
+14 containment reads added back on this pass 
+ sub-total contained reads unhidden 48
+this pass containment size is 6
+5 containment reads added back on this pass 
+ sub-total contained reads unhidden 53
+this pass containment size is 1
+1 containment reads added back on this pass 
+ sub-total contained reads unhidden 54
+ total contained reads unhidden 54
+ Writing layouts to bank reads.2000.bnk
+!!! 2015-01-20 13:45:48  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 13:45:48  Doing step 40:  Running consensus
+!!! 2015-01-20 13:45:48  Running: /home/dino/Documents/proj/amos/bin/make-consensus -B -b reads.2000.bnk
+Starting on Tue Jan 20 13:45:48 2015
+
+Read bank is reads.2000.bnk
+Alignment error rate is 0.06
+Minimum overlap bases is 5
+Output will be written to the bank
+Input is being read from the bank 
+Processed 1 layouts
+!!! 2015-01-20 13:45:49  Done! Elapsed time:0d 0h 0m 1s
+
+!!! 2015-01-20 13:45:49  Doing step 50:  Outputting contigs
+!!! 2015-01-20 13:45:49  Running: /home/dino/Documents/proj/amos/bin/bank2contig reads.2000.bnk > reads.2000.contig
+Processing reads.2000.bnk at Tue Jan 20 13:45:49 2015
+End: Tue Jan 20 13:45:49 2015
+!!! 2015-01-20 13:45:49  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 13:45:49  Doing step 60:  Converting to FastA file
+!!! 2015-01-20 13:45:49  Running: /home/dino/Documents/proj/amos/bin/bank2fasta -b reads.2000.bnk > reads.2000.fasta
+!!! 2015-01-20 13:45:49  Done! Elapsed time:0d 0h 0m 0s
+
+!!! END - Elapsed time: 0d 0h 0m 1s
+

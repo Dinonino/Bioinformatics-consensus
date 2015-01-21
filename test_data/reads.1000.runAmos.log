@@ -1,0 +1,67 @@
+!!! 2015-01-20 13:45:48  Started by dino@UNKNOWN on Tue Jan 20 13:45:48 2015
+
+!!! 2015-01-20 13:45:48  Doing step 10:  Building AMOS bank
+!!! 2015-01-20 13:45:48  Running: /home/dino/Documents/proj/amos/bin/bank-transact -c -z -b reads.1000.bnk -m reads.1000.afg
+START DATE: Tue Jan 20 13:45:48 2015
+Bank is: reads.1000.bnk
+    0%                                            100%
+AFG ..................................................
+Messages read: 120
+Objects added: 120
+Objects deleted: 0
+Objects replaced: 0
+END DATE:   Tue Jan 20 13:45:48 2015
+!!! 2015-01-20 13:45:48  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 13:45:48  Doing step 20:  Running overlap
+!!! 2015-01-20 13:45:48  Running: /home/dino/Documents/proj/amos/bin/hash-overlap -B reads.1000.bnk
+Starting on Tue Jan 20 13:45:48 2015
+
+Read bank is reads.1000.bnk
+Alignment error rate is 0.06
+Minimum overlap bases is 40
+Be strand-specific: 0
+!!! 2015-01-20 13:45:48  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 13:45:48  Doing step 30:  Running contigger
+!!! 2015-01-20 13:45:48  Running: /home/dino/Documents/proj/amos/bin/tigger -b reads.1000.bnk
+ Pulling reads from bank reads.1000.bnk
+Pulled 59 reads from bank 
+ Pulling overlaps from bank reads.1000.bnk
+Pulled 537 overlaps from bank 
+ total contained reads hidden 49
+ number of contigs 2
+this pass containment size is 49
+41 containment reads added back on this pass 
+ sub-total contained reads unhidden 41
+this pass containment size is 8
+8 containment reads added back on this pass 
+ sub-total contained reads unhidden 49
+ total contained reads unhidden 49
+ Writing layouts to bank reads.1000.bnk
+!!! 2015-01-20 13:45:48  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 13:45:48  Doing step 40:  Running consensus
+!!! 2015-01-20 13:45:48  Running: /home/dino/Documents/proj/amos/bin/make-consensus -B -b reads.1000.bnk
+Starting on Tue Jan 20 13:45:48 2015
+
+Read bank is reads.1000.bnk
+Alignment error rate is 0.06
+Minimum overlap bases is 5
+Output will be written to the bank
+Input is being read from the bank 
+Processed 1 layouts
+!!! 2015-01-20 13:45:48  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 13:45:48  Doing step 50:  Outputting contigs
+!!! 2015-01-20 13:45:48  Running: /home/dino/Documents/proj/amos/bin/bank2contig reads.1000.bnk > reads.1000.contig
+Processing reads.1000.bnk at Tue Jan 20 13:45:48 2015
+End: Tue Jan 20 13:45:48 2015
+!!! 2015-01-20 13:45:48  Done! Elapsed time:0d 0h 0m 0s
+
+!!! 2015-01-20 13:45:48  Doing step 60:  Converting to FastA file
+!!! 2015-01-20 13:45:48  Running: /home/dino/Documents/proj/amos/bin/bank2fasta -b reads.1000.bnk > reads.1000.fasta
+!!! 2015-01-20 13:45:48  Done! Elapsed time:0d 0h 0m 0s
+
+!!! END - Elapsed time: 0d 0h 0m 0s
+
